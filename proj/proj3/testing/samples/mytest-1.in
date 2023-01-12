@@ -1,0 +1,26 @@
+# A simple test designed myself.
+> init
+<<<
++ hello hello
+> add hello
+<<<
+> commit "hello"
+<<<
+D HEADER "commit [a-f0-9]+"
+D DATE "Date: \w\w\w \w\w\w \d+ \d\d:\d\d:\d\d \d\d\d\d [-+]\d\d\d\d"
+> log
+===
+${HEADER}
+${DATE}
+hello
+
+===
+${HEADER}
+${DATE}
+initial commit
+
+<<<*
++ hello helloworld
+> checkout -- hello
+<<<
+= hello hello

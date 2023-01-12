@@ -1,0 +1,43 @@
+Q: Is one sorting algorithm always faster than another?
+A: I think it is not, but according to what I see from the graph it seems like
+to be yes.
+
+Q: Above we said that BubbleSort, WipingBubbleSort, and InsertionSort each had
+the same Theta(N^2) asymptotic time complexity. How can you explain the
+differences in the plots for these three algorithms?
+A: I think maybe it's because they have different constant factors and the
+asymptotic time complexity doesn't count that.
+
+Q: What information can we gain from empirical analysis of algorithms which
+might not be as noticeable in asymptotical bounds?
+A: Well, we can get some information about which algorithm is faster when they
+have the same asymptotic time complexity.
+
+Q: For any given sorting algorithm, does increasing the array size always mean
+the sorting takes longer?
+A: No, the JavaSorter always use the similar time from small size array to
+larger one.
+
+Q: How does changing nrepeats change the plot?
+A: If you have a small value for nrepeats, the graph will get lumpy. More
+repeats, more smooth.
+
+Q: Is your plot the exact same as your partner's plot, even with the same values
+of ntrials, by, and nrepeats?
+A: A little bit different. Not exact same. 
+
+Q: Optional: Look at the source code for BubbleSorter to WipingBubbleSorter.
+After looking at the plots, can you intuitively explain why WipingBubbleSorter
+is usually 2x as fast as BubbleSorter? (Hint: Consider the immobility of some
+elements when the swapping passes are single directional (i.e. only going
+forward), and how this "Wiping" strategy helps deal with that issue.) Can you
+come up with an example that shows the difference in runtime?
+A: When you need to move the maximum to the end of the array, forward pass will
+finish it in just one round of execution, because it will always swap the
+maximum with other elements but without doing anything to those small elements
+after each swap. While when you need to move the minimum to the beginning of the
+array, backward pass will finish it in just one round of execution, because it
+will always swap the minimum with other elements but without doing anything to
+those big elements after each swap. Take "4,5,3" and "5,3,4" as examples, which
+"4,5,3" needs to move minimum, 3, to the beginning while "5,3,4" need to move
+maximum, 5, to the end of the array.

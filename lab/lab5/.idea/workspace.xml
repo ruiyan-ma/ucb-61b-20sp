@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="95e6289c-a709-42bf-acd3-3ee1e6baf358" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/ColumnMatchFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ColumnMatchFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EqualityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/EqualityFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GreaterThanFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/GreaterThanFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SubstringFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/SubstringFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/Table.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TableFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/TableFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TestTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/TestTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/lab5/partner.txt" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lab5/partner.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1YScns3ZOpufjD049bdv9o0vuwW" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RunManager">
+    <configuration name="TestTable" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lab5" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestTable" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Android JUnit.TestTable" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="95e6289c-a709-42bf-acd3-3ee1e6baf358" name="Default Changelist" comment="" />
+      <created>1582939605130</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582939605130</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+    </ignored-roots>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1251" y="444" width="430" height="255" key="#Vim_Emulation" timestamp="1591018752338">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="1251" y="444" width="430" height="255" key="#Vim_Emulation/0.23.1792.1097@0.23.1792.1097" timestamp="1591018752338" />
+    <state width="1750" height="303" key="GridCell.Tab.0.bottom" timestamp="1591027809013">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="303" key="GridCell.Tab.0.bottom/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809013" />
+    <state width="1153" height="303" key="GridCell.Tab.0.bottom/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1584698662425" />
+    <state width="1750" height="303" key="GridCell.Tab.0.center" timestamp="1591027809013">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="303" key="GridCell.Tab.0.center/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809013" />
+    <state width="1153" height="303" key="GridCell.Tab.0.center/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1584698662424" />
+    <state width="1750" height="303" key="GridCell.Tab.0.left" timestamp="1591027809012">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="303" key="GridCell.Tab.0.left/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809012" />
+    <state width="1153" height="303" key="GridCell.Tab.0.left/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1584698662424" />
+    <state width="1750" height="303" key="GridCell.Tab.0.right" timestamp="1591027809013">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="303" key="GridCell.Tab.0.right/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809013" />
+    <state width="1153" height="303" key="GridCell.Tab.0.right/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1584698662425" />
+    <state width="854" height="374" key="GridCell.Tab.1.bottom" timestamp="1591027809009">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="854" height="374" key="GridCell.Tab.1.bottom/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809009" />
+    <state width="854" height="374" key="GridCell.Tab.1.center" timestamp="1591027809008">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="854" height="374" key="GridCell.Tab.1.center/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809008" />
+    <state width="854" height="374" key="GridCell.Tab.1.left" timestamp="1591027809008">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="854" height="374" key="GridCell.Tab.1.left/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809008" />
+    <state width="854" height="374" key="GridCell.Tab.1.right" timestamp="1591027809009">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="854" height="374" key="GridCell.Tab.1.right/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809009" />
+    <state width="854" height="374" key="GridCell.Tab.2.bottom" timestamp="1591027809010">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="854" height="374" key="GridCell.Tab.2.bottom/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809010" />
+    <state width="854" height="374" key="GridCell.Tab.2.center" timestamp="1591027809009">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="854" height="374" key="GridCell.Tab.2.center/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809009" />
+    <state width="854" height="374" key="GridCell.Tab.2.left" timestamp="1591027809009">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="854" height="374" key="GridCell.Tab.2.left/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809009" />
+    <state width="854" height="374" key="GridCell.Tab.2.right" timestamp="1591027809010">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="854" height="374" key="GridCell.Tab.2.right/0.23.1792.1097@0.23.1792.1097" timestamp="1591027809010" />
+    <state x="85" y="153" key="SettingsEditor" timestamp="1590997958577">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="85" y="153" key="SettingsEditor/0.23.1792.1097@0.23.1792.1097" timestamp="1590997958577" />
+    <state x="1009" y="268" width="670" height="676" key="search.everywhere.popup" timestamp="1591018494362">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="1009" y="268" width="670" height="676" key="search.everywhere.popup/0.23.1792.1097@0.23.1792.1097" timestamp="1591018494362" />
+    <state x="626" y="490" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1590907350685">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="626" y="490" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.23.1792.1097@0.23.1792.1097" timestamp="1590907350685" />
+  </component>
+</project>

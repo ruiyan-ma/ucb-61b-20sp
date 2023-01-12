@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="980618c8-b8a4-4e85-9a29-c2358fb8308b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/capers/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/capers/Main.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1aNarHuR3GYOLwgussk7vUvuoip" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="capers.Main" />
+      <module name="lab12" />
+      <option name="PROGRAM_PARAMETERS" value="story Hello" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="capers.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="980618c8-b8a4-4e85-9a29-c2358fb8308b" name="Default Changelist" comment="" />
+      <created>1586578702240</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586578702240</updated>
+      <workItem from="1633501265866" duration="142000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/.." />
+    </ignored-roots>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="914" y="417" key="#Inspections" timestamp="1592199555673">
+      <screen x="0" y="23" width="2560" height="1417" />
+    </state>
+    <state x="914" y="417" key="#Inspections/0.23.2560.1417@0.23.2560.1417" timestamp="1592199555673" />
+    <state x="360" y="233" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586578796386">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state x="360" y="233" key="#com.intellij.execution.impl.EditConfigurationsDialog/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1586578796386" />
+    <state width="1750" height="303" key="GridCell.Tab.0.bottom" timestamp="1586578806917">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="303" key="GridCell.Tab.0.bottom/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1586578806917" />
+    <state width="1750" height="303" key="GridCell.Tab.0.center" timestamp="1586578806917">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="303" key="GridCell.Tab.0.center/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1586578806917" />
+    <state width="1750" height="303" key="GridCell.Tab.0.left" timestamp="1586578806916">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="303" key="GridCell.Tab.0.left/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1586578806916" />
+    <state width="1750" height="303" key="GridCell.Tab.0.right" timestamp="1586578806917">
+      <screen x="0" y="23" width="1792" height="1097" />
+    </state>
+    <state width="1750" height="303" key="GridCell.Tab.0.right/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1586578806917" />
+    <state x="567" y="265" key="SettingsEditor" timestamp="1592189817083">
+      <screen x="0" y="23" width="2560" height="1417" />
+    </state>
+    <state x="567" y="265" key="SettingsEditor/0.23.2560.1417@0.23.2560.1417" timestamp="1592189817083" />
+    <state x="397" y="210" key="SettingsEditor/274.-811.1194.811/0.23.1792.1097@0.23.1792.1097" timestamp="1586578776850" />
+  </component>
+</project>

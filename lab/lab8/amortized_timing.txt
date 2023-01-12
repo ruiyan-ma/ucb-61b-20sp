@@ -1,0 +1,45 @@
+Q: Is one GrowList implementation always better than the others?
+A: From single insertion perspective, it's not, but from accumulative
+perspective, it is.
+
+Q: Why is the runtime for N insertions into a geometrically resizing list a
+Theta(N) operation?
+A: Because not every insertion is the worst case which is the case that the
+array is filled up. After amortization the average complexity will be Θ(1).
+
+Q: Why is the runtime for N insertions into a arithmetically resizing list a
+Theta(N^2) operation?
+A: Because every time the array is filled up, this algorithm only increasing
+the size of the array by one. Then every insertion will be the worst case.
+
+Q: How does the runtime per operation for the ArithGrowList compare to that of
+GeomGrowList and JavaGrowList? Specifically look at the non-accumulated plots
+and describe the trends for how long each operation takes as a function of how
+many elements have already been inserted in the list.
+A: Mostly the runtime per operation for the ArithGrowList is longer than the
+other two. The trends of ArithGrowList is a kind of increasing while the other
+two algorithms are fixed.
+
+Q: When are there spikes in the per operation runtime graphs for each of the
+implementations? Do these make sense to you? Hint: some of these should and
+others might not. Empirical runtime can be quite messy and depends on machine
+specifics which will be revealed in other subsequent classes like CS61C.
+A: I believe some of them are the time when you need to create a larger
+array and move everything into it, while the other doesn't make sense to
+me.
+
+Q: Optional: Try changing the code for GeomGrowList to resize by a different
+factor. How does this effect the theoretical asymptotic runtime? How does this
+effect the plotted runtime?
+A: If you change GeomGrowList to resize by a much larger factor, like 10, the
+theoretical asymptotic runtime won't change, the average runtime of every single
+insertion will still be Θ(1), but actually with a larger factor, the plotted
+runtime will go lower because a larger factor brings a small coefficient to the
+asymptotic runtime. However, since asymptotic runtime will not consider
+coefficient, it won't change.
+
+Q: Optional: Try changing the code for ArithGrowList to resize by adding a
+different fixed number of spots in the array. How does this effect the
+theoretical asymptotic runtime? How does this effect the plotted runtime?
+A: The theoretical asymptotic runtime will not change but the plotted runtime
+will go lower, with the same reason as the question above.

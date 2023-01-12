@@ -1,0 +1,8 @@
+# Run your AI against the staff program.
+#* java -ea loa.Main
+autoprint
+seed 129384
+manual white
+auto black
+#*move
+#*remove move/win
