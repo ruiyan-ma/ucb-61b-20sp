@@ -54,7 +54,7 @@ public class Init extends Command {
         Repo.objectFolder.save(root);
         Repo.branchFolder.setHeadUid("master", rootUID);
         Repo.setCurrBranch("master");
-        Repo.logFolder.writeLogToBranch(root, "master");
+        Repo.logFolder.writeLogToBranch("master", root);
         Repo.branchLatestFolder.writeLatestCommit("master", rootUID);
     }
 

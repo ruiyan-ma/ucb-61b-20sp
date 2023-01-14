@@ -19,18 +19,18 @@ public abstract class Command {
      * Constructor function with args and operands number.
      */
     Command(String[] args, int operandsNum) {
-        _name = args[0];
+        commandName = args[0];
         if (args.length > 1) {
             _operands = Arrays.copyOfRange(args, 1, args.length);
         }
-        _operandsNum = operandsNum;
+        this.operandsNum = operandsNum;
     }
 
     /**
      * Constructor function for checkout command with ARGS.
      */
     Command(String[] args) {
-        _name = args[0];
+        commandName = args[0];
         if (args.length > 1) {
             _operands = Arrays.copyOfRange(args, 1, args.length);
         }
@@ -41,11 +41,11 @@ public abstract class Command {
      */
     void checkOperandsNum() {
         if (_operands == null) {
-            if (_operandsNum != 0) {
+            if (operandsNum != 0) {
                 Main.exitWithError("Incorrect operands.");
             }
         } else {
-            if (_operandsNum != _operands.length) {
+            if (operandsNum != _operands.length) {
                 Main.exitWithError("Incorrect operands.");
             }
         }
@@ -73,7 +73,7 @@ public abstract class Command {
     /**
      * The name of this command.
      */
-    protected String _name;
+    protected String commandName;
 
     /**
      * Operands of this command, got from args.
@@ -83,6 +83,6 @@ public abstract class Command {
     /**
      * Expected number of operands of this command.
      */
-    protected int _operandsNum;
+    protected int operandsNum;
 
 }

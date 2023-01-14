@@ -18,18 +18,11 @@ public class Log extends Command {
 
     @Override
     void checkOperands() {
-
     }
 
     @Override
     public void run() {
         checkOperands();
-        CommitData commitData = Repo.getCurrCommit();
-        while (commitData != null) {
-            String log = commitData.getLog();
-            System.out.print(log);
-            commitData = commitData.getParent();
-        }
+        System.out.println(Repo.logFolder.readLogOfBranch(Repo.getCurrBranch()));
     }
-
 }

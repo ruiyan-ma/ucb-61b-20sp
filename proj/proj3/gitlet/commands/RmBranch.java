@@ -14,15 +14,15 @@ public class RmBranch extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        _delBranch = _operands[0];
+        delBranch = _operands[0];
     }
 
     @Override
     void checkOperands() {
-        if (!Repo.branchFolder.hasBranch(_delBranch)) {
+        if (!Repo.branchFolder.hasBranch(delBranch)) {
             Main.exitWithError("A branch with that name does not exist.");
         }
-        if (Repo.getCurrBranch().equals(_delBranch)) {
+        if (Repo.getCurrBranch().equals(delBranch)) {
             Main.exitWithError("Cannot remove the current branch.");
         }
     }
@@ -30,10 +30,10 @@ public class RmBranch extends Command {
     @Override
     public void run() {
         checkOperands();
-        Repo.branchFolder.deleteBranch(_delBranch);
+        Repo.branchFolder.deleteBranch(delBranch);
     }
 
     /** Branch name. */
-    private final String _delBranch;
+    private final String delBranch;
 
 }

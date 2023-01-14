@@ -6,23 +6,27 @@ import gitlet.repo.Repo;
 
 import java.io.IOException;
 
-/** This class is the checkout command class.
- *  @author ryan ma
- *  */
+/**
+ * This class is the checkout command class.
+ *
+ * @author ryan ma
+ */
 
 public class Checkout extends Command {
 
-    /** Constructor function with ARGS. */
+    /**
+     * Constructor function with ARGS.
+     */
     public Checkout(String[] args) {
         super(args);
         checkInitial();
         if (_operands.length == 1) {
-            _branch = _operands[0];
+            branchName = _operands[0];
         } else if (_operands.length == 2) {
-            _file = _operands[1];
+            fileName = _operands[1];
         } else if (_operands.length == 3) {
-            _id = _operands[0];
-            _file = _operands[2];
+            commitId = _operands[0];
+            fileName = _operands[2];
         } else {
             Main.exitWithError("Incorrect operands.");
         }
@@ -32,26 +36,26 @@ public class Checkout extends Command {
     void checkOperands() {
         checkInitial();
         if (_operands.length == 1) {
-            if (!Repo.branchFolder.hasBranch(_branch)) {
+            if (!Repo.branchFolder.hasBranch(branchName)) {
                 Main.exitWithError("No such branch exist.");
             }
-            if (Repo.getCurrBranch().equals(_branch)) {
+            if (Repo.getCurrBranch().equals(branchName)) {
                 Main.exitWithError("No need to checkout the current branch.");
             }
         } else if (_operands.length == 2) {
             if (!_operands[0].equals("--")) {
                 Main.exitWithError("Incorrect operands.");
             }
-            if (!Repo.currCommitContainsFile(_file)) {
+            if (!Repo.currCommitContainsFile(fileName)) {
                 Main.exitWithError("File does not exist in that commit.");
             }
         } else if (_operands.length == 3) {
             if (!_operands[1].equals("--")) {
                 Main.exitWithError("Incorrect operands.");
             }
-            if (!Repo.objectFolder.containsCommit(_id)) {
+            if (!Repo.objectFolder.containsCommit(commitId)) {
                 Main.exitWithError("No commit with that id exists.");
-            } else if (!Repo.objectFolder.getCommit(_id).containsFile(_file)) {
+            } else if (!Repo.objectFolder.getCommit(commitId).containsFile(fileName)) {
                 Main.exitWithError("File does not exist in that commit.");
             }
         }
@@ -61,31 +65,36 @@ public class Checkout extends Command {
     public void run() throws IOException {
         checkOperands();
         if (_operands.length == 1) {
-            String branchHeadUID = Repo.branchFolder.getHeadUid(_branch);
+            String branchHeadUID = Repo.branchFolder.getHeadUid(branchName);
             CommitData branchHead = Repo.objectFolder.getCommit(branchHeadUID);
             if (Repo.workFolder.canNotCheckoutAllFiles(branchHead)) {
-                Main.exitWithError("There is an untracked file in the "
-                                   + "way; delete it, or add and "
-                                   + "commit it first.");
+                Main.exitWithError("There is an untracked file in the way; delete it, " +
+                        "or add and commit it first.");
             }
-            Repo.workFolder.checkoutAllFilesWithCommit(Repo.objectFolder.getCommit(branchHeadUID));
-            Repo.setCurrBranch(_branch);
+            Repo.workFolder.checkoutAllFilesWithCommit(branchHead);
+            Repo.setCurrBranch(branchName);
             Repo.getStage().clean();
             Repo.getStage().save();
         } else if (_operands.length == 2) {
-            Repo.workFolder.checkoutFileWithCommit(Repo.getCurrCommit(), _file);
+            Repo.workFolder.checkoutFileWithCommit(Repo.getCurrCommit(), fileName);
         } else if (_operands.length == 3) {
-            Repo.workFolder.checkoutFileWithCommit(Repo.objectFolder.getCommit(_id), _file);
+            Repo.workFolder.checkoutFileWithCommit(Repo.objectFolder.getCommit(commitId), fileName);
         }
     }
 
-    /** File name. */
-    private String _file;
+    /**
+     * File name.
+     */
+    private String fileName;
 
-    /** Commit id. */
-    private String _id;
+    /**
+     * Commit id.
+     */
+    private String commitId;
 
-    /** Branch name. */
-    private String _branch;
+    /**
+     * Branch name.
+     */
+    private String branchName;
 
 }

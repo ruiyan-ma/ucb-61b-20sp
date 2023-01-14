@@ -17,7 +17,7 @@ public class Find extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        _message = _operands[0];
+        message = _operands[0];
     }
 
     @Override
@@ -31,15 +31,17 @@ public class Find extends Command {
         List<String> branches = Repo.branchFolder.getAllBranches();
         StringBuilder find = new StringBuilder();
         assert branches != null;
+
         for (String branch : branches) {
             CommitData commit = Repo.branchLatestFolder.getLatestCommit(branch);
             while (commit != null) {
-                if (commit.getMessage().equals(_message)) {
+                if (commit.getMessage().equals(message)) {
                     find.append(commit.getUID()).append("\n");
                 }
                 commit = commit.getParent();
             }
         }
+
         if (find.toString().equals("")) {
             Main.exitWithError("Found no commit with that message.");
         } else {
@@ -48,6 +50,6 @@ public class Find extends Command {
     }
 
     /** Commit message. */
-    private final String _message;
+    private final String message;
 
 }

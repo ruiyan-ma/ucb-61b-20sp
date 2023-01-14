@@ -147,7 +147,7 @@ public class Repo {
     public static void writeLogToCurrBranch() {
         createCurrCommit();
         createBranch();
-        logFolder.writeLogToBranch(currCommit, currBranch);
+        logFolder.writeLogToBranch(currBranch, currCommit);
     }
 
     /**

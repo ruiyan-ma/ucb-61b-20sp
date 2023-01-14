@@ -126,5 +126,4 @@ public class Status extends Command {
         }
         return status.toString();
     }
-
 }

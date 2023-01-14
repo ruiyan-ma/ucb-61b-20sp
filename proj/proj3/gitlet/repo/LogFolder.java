@@ -29,7 +29,7 @@ public class LogFolder extends Folder {
     /**
      * Write the given commit into log of the given branch.
      */
-    public void writeLogToBranch(CommitData commit, String branchName) {
+    public void writeLogToBranch(String branchName, CommitData commit) {
         String log = commit.getLog() + readLogOfBranch(branchName);
         writeToFile(branchName, log);
     }

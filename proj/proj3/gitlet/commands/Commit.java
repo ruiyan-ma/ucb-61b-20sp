@@ -17,8 +17,8 @@ public class Commit extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        _message = _operands[0];
-        _secParent = null;
+        message = _operands[0];
+        secParent = null;
     }
 
     /** Constructor for merge command, with ARGS and SECPARENT. */
@@ -26,8 +26,8 @@ public class Commit extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        _message = _operands[0];
-        _secParent = secParent;
+        message = _operands[0];
+        this.secParent = secParent;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Commit extends Command {
         if (Repo.getStage().additionMap.isEmpty() && Repo.getStage().removalSet.isEmpty()) {
             Main.exitWithError("No changes added to the commit.");
         }
-        if (_message.equals("")) {
+        if (message.equals("")) {
             Main.exitWithError("Please enter a commit message.");
         }
     }
@@ -43,12 +43,14 @@ public class Commit extends Command {
     @Override
     public void run() throws IOException {
         checkOperands();
+
         CommitData commitData;
-        if (_secParent != null) {
-            commitData = new CommitData(_message, Repo.getCurrHeadUid(), _secParent, Repo.getStage());
+        if (secParent != null) {
+            commitData = new CommitData(message, Repo.getCurrHeadUid(), secParent, Repo.getStage());
         } else {
-            commitData = new CommitData(_message, Repo.getCurrHeadUid(), Repo.getStage());
+            commitData = new CommitData(message, Repo.getCurrHeadUid(), Repo.getStage());
         }
+
         Repo.setCurrCommit(commitData);
         String uid = commitData.getUID();
         Repo.setCurrHeadUid(uid);
@@ -56,13 +58,13 @@ public class Commit extends Command {
         Repo.writeLogToCurrBranch();
         Repo.getStage().clean();
         Repo.getStage().save();
-        Repo.objectFolder.save(Repo.getCurrCommit());
+        Repo.objectFolder.save(commitData);
     }
 
     /** Commit message. */
-    private final String _message;
+    private final String message;
 
     /** Second parent, only for merge command. */
-    private final String _secParent;
+    private final String secParent;
 
 }

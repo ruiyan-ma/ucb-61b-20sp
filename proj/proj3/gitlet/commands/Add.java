@@ -35,15 +35,19 @@ public class Add extends Command {
     public void run() throws IOException {
         checkOperands();
 
+        // if this file has been removed before, then remove it from addition map and removal set.
         if (Repo.getStage().removalSet.contains(fileName)) {
             Repo.getStage().additionMap.remove(fileName);
             Repo.getStage().removalSet.remove(fileName);
         }
 
+        // if the current commit has the same file with the working directory, remove it from addition map.
         if (Repo.currCommitSameFile(fileName)) {
             Repo.getStage().additionMap.remove(fileName);
         } else {
+            // if the stage doesn't contain the same file with the working directory, add it.
             if (Repo.stageNotContainSameFile(fileName)) {
+                // create a new bolb and save it.
                 Bolb bolb = new Bolb(Repo.workFolder.readFromFile(fileName));
                 String uid = bolb.getUID();
                 Repo.objectFolder.save(bolb);

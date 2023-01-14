@@ -32,5 +32,4 @@ public class GLog extends Command {
             System.out.print(log);
         }
     }
-
 }

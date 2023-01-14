@@ -17,12 +17,12 @@ public class Reset extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        _id = _operands[0];
+        commitId = _operands[0];
     }
 
     @Override
     void checkOperands() {
-        if (!Repo.objectFolder.containsCommit(_id)) {
+        if (!Repo.objectFolder.containsCommit(commitId)) {
             Main.exitWithError("No commit with that id exists.");
         }
     }
@@ -30,20 +30,19 @@ public class Reset extends Command {
     @Override
     public void run() throws IOException {
         checkOperands();
-        CommitData commit = Repo.objectFolder.getCommit(_id);
+        CommitData commit = Repo.objectFolder.getCommit(commitId);
         if (Repo.workFolder.canNotCheckoutAllFiles(commit)) {
             Main.exitWithError("There is an untracked file in the "
                                + "way; delete it, or add and commit it first.");
         }
         assert commit != null;
         Repo.workFolder.checkoutAllFilesWithCommit(commit);
-        Repo.branchFolder.setHeadUid(Repo.getCurrBranch(),
-                                             commit.getUID());
+        Repo.branchFolder.setHeadUid(Repo.getCurrBranch(), commit.getUID());
         Repo.getStage().clean();
         Repo.getStage().save();
     }
 
     /** Commit id. */
-    private final String _id;
+    private final String commitId;
 
 }

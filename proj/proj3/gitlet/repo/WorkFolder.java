@@ -29,7 +29,7 @@ public class WorkFolder extends Folder {
     /**
      * Return the uid of file FILENAME.
      */
-    String getUidOfFile(String fileName) {
+    public String getUidOfFile(String fileName) {
         Bolb bolb = new Bolb(readFromFile(fileName));
         return bolb.getUID();
     }

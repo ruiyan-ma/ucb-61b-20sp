@@ -34,7 +34,7 @@ public class Branch extends Command {
         Repo.branchFolder.setHeadUid(newBranchName, Repo.getCurrHeadUid());
 
         Repo.logFolder.addFile(newBranchName);
-        Repo.logFolder.writeLogToBranch(Repo.getCurrCommit(), newBranchName);
+        Repo.logFolder.writeLogToBranch(newBranchName, Repo.getCurrCommit());
 
         Repo.branchLatestFolder.addFile(newBranchName);
         Repo.branchLatestFolder.writeLatestCommit(newBranchName, Repo.getCurrHeadUid());
