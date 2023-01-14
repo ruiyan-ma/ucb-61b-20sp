@@ -2,9 +2,10 @@ package gitlet.commands;
 
 import gitlet.Main;
 import gitlet.objects.CommitData;
-import gitlet.repo.Repo;
 
 import java.io.IOException;
+
+import static gitlet.Main.repo;
 
 /**
  * This class is the checkout command class.
@@ -20,13 +21,13 @@ public class Checkout extends Command {
     public Checkout(String[] args) {
         super(args);
         checkInitial();
-        if (_operands.length == 1) {
-            branchName = _operands[0];
-        } else if (_operands.length == 2) {
-            fileName = _operands[1];
-        } else if (_operands.length == 3) {
-            commitId = _operands[0];
-            fileName = _operands[2];
+        if (operands.length == 1) {
+            branchName = operands[0];
+        } else if (operands.length == 2) {
+            fileName = operands[1];
+        } else if (operands.length == 3) {
+            commitId = operands[0];
+            fileName = operands[2];
         } else {
             Main.exitWithError("Incorrect operands.");
         }
@@ -35,27 +36,27 @@ public class Checkout extends Command {
     @Override
     void checkOperands() {
         checkInitial();
-        if (_operands.length == 1) {
-            if (!Repo.branchFolder.hasBranch(branchName)) {
+        if (operands.length == 1) {
+            if (!repo.branchFolder.hasBranch(branchName)) {
                 Main.exitWithError("No such branch exist.");
             }
-            if (Repo.getCurrBranch().equals(branchName)) {
+            if (repo.getCurrBranch().equals(branchName)) {
                 Main.exitWithError("No need to checkout the current branch.");
             }
-        } else if (_operands.length == 2) {
-            if (!_operands[0].equals("--")) {
+        } else if (operands.length == 2) {
+            if (!operands[0].equals("--")) {
                 Main.exitWithError("Incorrect operands.");
             }
-            if (!Repo.currCommitContainsFile(fileName)) {
+            if (!repo.getCurrCommit().containsFile(fileName)) {
                 Main.exitWithError("File does not exist in that commit.");
             }
-        } else if (_operands.length == 3) {
-            if (!_operands[1].equals("--")) {
+        } else if (operands.length == 3) {
+            if (!operands[1].equals("--")) {
                 Main.exitWithError("Incorrect operands.");
             }
-            if (!Repo.objectFolder.containsCommit(commitId)) {
+            if (!repo.objectFolder.containsCommit(commitId)) {
                 Main.exitWithError("No commit with that id exists.");
-            } else if (!Repo.objectFolder.getCommit(commitId).containsFile(fileName)) {
+            } else if (!repo.objectFolder.getCommit(commitId).containsFile(fileName)) {
                 Main.exitWithError("File does not exist in that commit.");
             }
         }
@@ -64,21 +65,23 @@ public class Checkout extends Command {
     @Override
     public void run() throws IOException {
         checkOperands();
-        if (_operands.length == 1) {
-            String branchHeadUID = Repo.branchFolder.getHeadUid(branchName);
-            CommitData branchHead = Repo.objectFolder.getCommit(branchHeadUID);
-            if (Repo.workFolder.canNotCheckoutAllFiles(branchHead)) {
+        if (operands.length == 1) {
+            String branchHeadUID = repo.branchFolder.getHeadUid(branchName);
+            CommitData branchHead = repo.objectFolder.getCommit(branchHeadUID);
+
+            if (repo.workFolder.canNotCheckoutAllFiles(branchHead)) {
                 Main.exitWithError("There is an untracked file in the way; delete it, " +
                         "or add and commit it first.");
             }
-            Repo.workFolder.checkoutAllFilesWithCommit(branchHead);
-            Repo.setCurrBranch(branchName);
-            Repo.getStage().clean();
-            Repo.getStage().save();
-        } else if (_operands.length == 2) {
-            Repo.workFolder.checkoutFileWithCommit(Repo.getCurrCommit(), fileName);
-        } else if (_operands.length == 3) {
-            Repo.workFolder.checkoutFileWithCommit(Repo.objectFolder.getCommit(commitId), fileName);
+
+            repo.workFolder.checkoutAllFilesWithCommit(branchHead);
+            repo.setCurrBranch(branchName);
+            repo.getStage().clean();
+            repo.getStage().save();
+        } else if (operands.length == 2) {
+            repo.workFolder.checkoutFileWithCommit(repo.getCurrCommit(), fileName);
+        } else if (operands.length == 3) {
+            repo.workFolder.checkoutFileWithCommit(repo.objectFolder.getCommit(commitId), fileName);
         }
     }
 

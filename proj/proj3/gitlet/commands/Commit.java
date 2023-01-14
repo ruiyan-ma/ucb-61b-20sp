@@ -2,9 +2,10 @@ package gitlet.commands;
 
 import gitlet.objects.CommitData;
 import gitlet.Main;
-import gitlet.repo.Repo;
 
 import java.io.IOException;
+
+import static gitlet.Main.repo;
 
 /** This class is the commit command class.
  *  @author ryan ma
@@ -17,7 +18,7 @@ public class Commit extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        message = _operands[0];
+        message = operands[0];
         secParent = null;
     }
 
@@ -26,13 +27,13 @@ public class Commit extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        message = _operands[0];
+        message = operands[0];
         this.secParent = secParent;
     }
 
     @Override
     void checkOperands() {
-        if (Repo.getStage().additionMap.isEmpty() && Repo.getStage().removalSet.isEmpty()) {
+        if (repo.getStage().additionMap.isEmpty() && repo.getStage().removalSet.isEmpty()) {
             Main.exitWithError("No changes added to the commit.");
         }
         if (message.equals("")) {
@@ -46,19 +47,27 @@ public class Commit extends Command {
 
         CommitData commitData;
         if (secParent != null) {
-            commitData = new CommitData(message, Repo.getCurrHeadUid(), secParent, Repo.getStage());
+            commitData = new CommitData(message, repo.getCurrHeadUid(), secParent, repo.getStage());
         } else {
-            commitData = new CommitData(message, Repo.getCurrHeadUid(), Repo.getStage());
+            commitData = new CommitData(message, repo.getCurrHeadUid(), repo.getStage());
         }
 
-        Repo.setCurrCommit(commitData);
+        // set current commit
+        repo.setCurrCommit(commitData);
+
+        // set head uid for current branch
         String uid = commitData.getUID();
-        Repo.setCurrHeadUid(uid);
-        Repo.branchLatestFolder.writeLatestCommit(Repo.getCurrBranch(), uid);
-        Repo.writeLogToCurrBranch();
-        Repo.getStage().clean();
-        Repo.getStage().save();
-        Repo.objectFolder.save(commitData);
+        repo.setCurrHeadUid(uid);
+
+        // update the latest commit uid for current branch
+        repo.latestFolder.setLatestUid(repo.getCurrBranch(), uid);
+
+        // log commit
+        repo.logFolder.writeLogToBranch(repo.getCurrBranch(), repo.getCurrCommit());
+
+        repo.getStage().clean();
+        repo.getStage().save();
+        repo.objectFolder.save(commitData);
     }
 
     /** Commit message. */

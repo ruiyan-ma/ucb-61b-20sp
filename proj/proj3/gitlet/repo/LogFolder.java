@@ -3,7 +3,7 @@ package gitlet.repo;
 import gitlet.objects.CommitData;
 
 /**
- * This class represents the log directory in LOG_FOLDER.
+ * This class represents the log folder.
  *
  * @author ryan ma
  */

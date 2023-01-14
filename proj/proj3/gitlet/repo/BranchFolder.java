@@ -5,8 +5,11 @@ import gitlet.objects.CommitData;
 import java.util.List;
 import java.util.Queue;
 
+import static gitlet.Main.repo;
+
 /**
- * This class represents the branch directory in BRANCH_HEAD_FOLDER.
+ * This class represents the ".gitlet/refs/heads" folder.
+ * It records the current head UID of each branch.
  *
  * @author ryan ma
  */
@@ -44,7 +47,7 @@ public class BranchFolder extends Folder {
     }
 
     /**
-     * Change the HEAD UID of the branch.
+     * Set the HEAD UID of the branch.
      */
     public void setHeadUid(String branchName, String uid) {
         writeToFile(branchName, uid);
@@ -62,7 +65,7 @@ public class BranchFolder extends Folder {
      */
     public Queue<CommitData> getHistoryOfBranch(String branchName) {
         String uid = getHeadUid(branchName);
-        CommitData commit = Repo.objectFolder.getCommit(uid);
-        return Repo.objectFolder.getHistoryOfCommit(commit);
+        CommitData commit = repo.objectFolder.getCommit(uid);
+        return commit.getHistoryCommit();
     }
 }

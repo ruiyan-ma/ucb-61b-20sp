@@ -29,35 +29,35 @@ public class Folder {
     }
 
     /**
-     * Return the absolute path of file FILENAME.
+     * Return the absolute path of the given file.
      */
     public File getFile(String fileName) {
         return Utils.join(folder, fileName);
     }
 
     /**
-     * Return true if the file FILENAME exists in this Dir.
+     * Return true if the file exists in this Dir.
      */
     public boolean checkExist(String fileName) {
         return getFile(fileName).exists();
     }
 
     /**
-     * Return String read from file FILENAME.
+     * Return String read from this file.
      */
     public String readFromFile(String fileName) {
         return Utils.readContentsAsString(getFile(fileName));
     }
 
     /**
-     * Write CONTENT to file FILENAME.
+     * Write content to file.
      */
     public void writeToFile(String fileName, String content) {
         Utils.writeContents(getFile(fileName), content);
     }
 
     /**
-     * Add file FILENAME to working directory.
+     * Add the file to the current folder.
      */
     public void addFile(String fileName) throws IOException {
         assert !getAllFileName().contains(fileName);

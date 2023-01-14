@@ -1,13 +1,11 @@
 package gitlet.objects;
 
 import gitlet.Utils;
-import gitlet.repo.Repo;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
+
+import static gitlet.Main.repo;
 
 /**
  * This class defines the components of a commit.
@@ -36,7 +34,7 @@ public class CommitData extends GitletObject {
         timestamp = new Date();
         this.logMessage = logMessage;
         _parentUID = parentUID;
-        CommitData parentCommit = Repo.objectFolder.getCommit(parentUID);
+        CommitData parentCommit = repo.objectFolder.getCommit(parentUID);
 
         assert parentCommit != null;
         fileMap = new TreeMap<>(parentCommit.fileMap);
@@ -54,7 +52,7 @@ public class CommitData extends GitletObject {
         this.logMessage = logMessage;
         _parentUID = parentUID;
         _secParentUID = secParentUID;
-        CommitData parentCommit = Repo.objectFolder.getCommit(parentUID);
+        CommitData parentCommit = repo.objectFolder.getCommit(parentUID);
 
         assert parentCommit != null;
         fileMap = new TreeMap<>(parentCommit.fileMap);
@@ -90,7 +88,7 @@ public class CommitData extends GitletObject {
      */
     public CommitData getParent() {
         if (hasParent()) {
-            return Repo.objectFolder.getCommit(_parentUID);
+            return repo.objectFolder.getCommit(_parentUID);
         }
         return null;
     }
@@ -107,7 +105,7 @@ public class CommitData extends GitletObject {
      */
     public CommitData getSecParent() {
         if (hasSecParent()) {
-            return Repo.objectFolder.getCommit(_secParentUID);
+            return repo.objectFolder.getCommit(_secParentUID);
         }
         return null;
     }
@@ -167,13 +165,27 @@ public class CommitData extends GitletObject {
     }
 
     /**
-     * Return true if this commit contains the same Bolb uid for the given file.
+     * Return a queue of all history commits of the given commit.
      */
-    public boolean compareFile(String fileName, String bolbUid) {
-        if (containsFile(fileName)) {
-            return fileMap.get(fileName).equals(bolbUid);
+    public Queue<CommitData> getHistoryCommit() {
+        /* Use BFS algorithm to retrieve commit tree. */
+        Queue<CommitData> queue = new LinkedList<>();
+        Queue<CommitData> history = new LinkedList<>();
+        queue.add(this);
+
+        while (!queue.isEmpty()) {
+            CommitData commit = queue.poll();
+            history.add(commit);
+
+            if (commit.hasParent()) {
+                queue.add(commit.getParent());
+            }
+
+            if (commit.hasSecParent()) {
+                queue.add(commit.getSecParent());
+            }
         }
-        return false;
+        return history;
     }
 
     /**
@@ -182,7 +194,7 @@ public class CommitData extends GitletObject {
      */
     private boolean notContainSameFile(CommitData commit, String fileName) {
         if (commit.containsFile(fileName) && containsFile(fileName)) {
-            return !compareFile(fileName, commit.getBolbUID(fileName));
+            return !fileMap.get(fileName).equals(commit.getBolbUID(fileName));
         } else {
             return (commit.containsFile(fileName) || containsFile(fileName));
         }

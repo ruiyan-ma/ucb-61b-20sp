@@ -5,7 +5,6 @@ import gitlet.objects.CommitData;
 import gitlet.objects.Stage;
 
 import java.io.File;
-import java.util.Queue;
 
 /**
  * This class represents the repository in gitlet.
@@ -27,176 +26,83 @@ public class Repo {
      */
     public static final File HEAD_FILE = new File(".gitlet/HEAD");
 
+    public Repo() {
+        workFolder = new WorkFolder();
+        objectFolder = new ObjectFolder();
+        branchFolder = new BranchFolder();
+        latestFolder = new LatestFolder();
+        logFolder = new LogFolder();
+    }
+
     /**
-     * Create current commit.
+     * Update the current branch, stage and the current commit.
      */
-    private static void createCurrCommit() {
+    public void update() {
+        currBranch = Utils.readContentsAsString(HEAD_FILE);
+        stage = Stage.readFromFile();
+        currCommit = objectFolder.getCommit(getCurrHeadUid());
+    }
+
+    public CommitData getCurrCommit() {
         if (currCommit == null) {
             currCommit = objectFolder.getCommit(getCurrHeadUid());
         }
-    }
 
-    /**
-     * Create current stage.
-     */
-    private static void createStage() {
-        if (stage == null) {
-            stage = Stage.readFromFile();
-        }
-    }
-
-    /**
-     * Create current branch.
-     */
-    private static void createBranch() {
-        if (currBranch == null) {
-            currBranch = Utils.readContentsAsString(HEAD_FILE);
-        }
-    }
-
-    /**
-     * Update all.
-     */
-    public static void update() {
-        currCommit = null;
-        currBranch = null;
-        stage = null;
-    }
-
-    /**
-     * Return current commit.
-     */
-    public static CommitData getCurrCommit() {
-        createCurrCommit();
         return currCommit;
     }
 
-    /**
-     * Return current branch.
-     */
-    public static String getCurrBranch() {
-        createBranch();
+    public String getCurrBranch() {
+        if (currBranch == null) {
+            currBranch = Utils.readContentsAsString(HEAD_FILE);
+        }
+
         return currBranch;
     }
 
-    /**
-     * Return stage.
-     */
-    public static Stage getStage() {
-        createStage();
+    public Stage getStage() {
+        if (stage == null) {
+            stage = Stage.readFromFile();
+        }
         return stage;
     }
 
-    /**
-     * Return the head UID of the current branch.
-     */
-    public static String getCurrHeadUid() {
-        return branchFolder.getHeadUid(getCurrBranch());
-    }
-
-    /**
-     * Change current commit to the given commit.
-     */
-    public static void setCurrCommit(CommitData commitData) {
+    public void setCurrCommit(CommitData commitData) {
         currCommit = commitData;
     }
 
-    /**
-     * Change the current branch to the given branch.
-     */
-    public static void setCurrBranch(String branchName) {
+    public void setCurrBranch(String branchName) {
+        currBranch = branchName;
         Utils.writeContents(HEAD_FILE, branchName);
     }
 
     /**
-     * Change the HEAD of current branch to UID.
+     * Get the head uid of the current branch.
      */
-    public static void setCurrHeadUid(String uid) {
-        createBranch();
-        branchFolder.setHeadUid(currBranch, uid);
+    public String getCurrHeadUid() {
+        return branchFolder.getHeadUid(getCurrBranch());
     }
 
+
     /**
-     * Return true if current commit contains file FILENAME.
+     * Set the head uid for the current branch.
      */
-    public static boolean currCommitContainsFile(String fileName) {
-        createCurrCommit();
-        return currCommit.containsFile(fileName);
+    public void setCurrHeadUid(String uid) {
+        branchFolder.setHeadUid(getCurrBranch(), uid);
     }
 
-    /**
-     * Return true if the file FILENAME in current working directory is the
-     * same with the file in the given commit.
-     */
-    public static boolean currCommitSameFile(String fileName) {
-        createCurrCommit();
-        return currCommit.compareFile(fileName, workFolder.getUidOfFile(fileName));
-    }
+    public final WorkFolder workFolder;
 
-    /**
-     * Return the history uid of current branch.
-     */
-    public static Queue<CommitData> getHistoryOfCurrCommit() {
-        createCurrCommit();
-        return objectFolder.getHistoryOfCommit(currCommit);
-    }
+    public final BranchFolder branchFolder;
 
-    /**
-     * Write current commit into log of current branch.
-     */
-    public static void writeLogToCurrBranch() {
-        createCurrCommit();
-        createBranch();
-        logFolder.writeLogToBranch(currBranch, currCommit);
-    }
+    public final LatestFolder latestFolder;
 
-    /**
-     * Return false if the given file in current working directory is not the
-     * same as the file in staging area.
-     */
-    public static boolean stageNotContainSameFile(String fileName) {
-        createStage();
-        return !stage.compareFile(fileName, workFolder.getUidOfFile(fileName));
-    }
+    public final LogFolder logFolder;
 
-    /**
-     * Work dir.
-     */
-    public static final WorkFolder workFolder = new WorkFolder();
+    public final ObjectFolder objectFolder;
 
-    /**
-     * Branch Dir.
-     */
-    public static final BranchFolder branchFolder = new BranchFolder();
+    private CommitData currCommit;
 
-    /**
-     * Branch latest commit dir.
-     */
-    public static final BranchLatestFolder branchLatestFolder = new BranchLatestFolder();
+    private String currBranch;
 
-    /**
-     * Log Dir.
-     */
-    public static final LogFolder logFolder = new LogFolder();
-
-    /**
-     * Objects dir.
-     */
-    public static final ObjectFolder objectFolder = new ObjectFolder();
-
-    /**
-     * Current commit. Only use when needed.
-     */
-    private static CommitData currCommit;
-
-    /**
-     * Current branch. Only used when needed.
-     */
-    private static String currBranch;
-
-    /**
-     * Stage. Only used when needed.
-     */
-    private static Stage stage;
-
+    private Stage stage;
 }

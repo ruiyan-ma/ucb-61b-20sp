@@ -8,9 +8,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import static gitlet.Main.repo;
+
 /**
- * This class is responsible for handling all operations with working
- * directory.
+ * This class is responsible for handling all operations in the working directory.
  *
  * @author ryan ma
  */
@@ -27,11 +28,17 @@ public class WorkFolder extends Folder {
     }
 
     /**
-     * Return the uid of file FILENAME.
+     * Return the uid of a file.
      */
     public String getUidOfFile(String fileName) {
-        Bolb bolb = new Bolb(readFromFile(fileName));
-        return bolb.getUID();
+        return Utils.sha1(readFromFile(fileName));
+    }
+
+    /**
+     * Compare the content of the given file.
+     */
+    public boolean compareFile(String fileName, String uid) {
+        return getUidOfFile(fileName).equals(uid);
     }
 
     /**
@@ -41,7 +48,7 @@ public class WorkFolder extends Folder {
         if (!checkExist(fileName)) {
             addFile(fileName);
         }
-        Bolb bolb = Repo.objectFolder.getBolb(commit, fileName);
+        Bolb bolb = repo.objectFolder.getBolb(commit, fileName);
         writeToFile(fileName, bolb.getContent());
     }
 
@@ -54,10 +61,10 @@ public class WorkFolder extends Folder {
 
         for (String fileName : workingFiles) {
             if (commit.containsFile(fileName)) {
-                if (!Repo.currCommitContainsFile(fileName)) {
+                if (!repo.getCurrCommit().containsFile(fileName)) {
                     untracked = true;
                     break;
-                } else if (!Repo.currCommitSameFile(fileName)) {
+                } else if (!compareFile(fileName, repo.getCurrCommit().getBolbUID(fileName))) {
                     changed = true;
                     break;
                 }
@@ -72,7 +79,7 @@ public class WorkFolder extends Folder {
      */
     public void checkoutAllFilesWithCommit(CommitData commit) throws IOException {
         Set<String> filesInCommit = commit.getAllFileName();
-        Set<String> filesToBeDeleted = Repo.getCurrCommit().getAllFileName();
+        Set<String> filesToBeDeleted = repo.getCurrCommit().getAllFileName();
         filesToBeDeleted.removeAll(filesInCommit);
 
         for (String fileName : filesInCommit) {

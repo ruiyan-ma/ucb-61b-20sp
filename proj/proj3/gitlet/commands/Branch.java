@@ -1,27 +1,32 @@
 package gitlet.commands;
 
 import gitlet.Main;
-import gitlet.repo.Repo;
 
 import java.io.IOException;
 
-/** This class is the branch command class.
- *  @author ryan ma
- *  */
+import static gitlet.Main.repo;
+
+/**
+ * This class is the branch command class.
+ *
+ * @author ryan ma
+ */
 
 public class Branch extends Command {
 
-    /** Constructor function with ARGS. */
+    /**
+     * Constructor function with ARGS.
+     */
     public Branch(String[] args) {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        newBranchName = _operands[0];
+        newBranchName = operands[0];
     }
 
     @Override
     void checkOperands() {
-        if (Repo.branchFolder.hasBranch(newBranchName)) {
+        if (repo.branchFolder.hasBranch(newBranchName)) {
             Main.exitWithError("A branch with that name already exists.");
         }
     }
@@ -30,16 +35,20 @@ public class Branch extends Command {
     public void run() throws IOException {
         checkOperands();
 
-        Repo.branchFolder.addFile(newBranchName);
-        Repo.branchFolder.setHeadUid(newBranchName, Repo.getCurrHeadUid());
+        // add new branch and set its head uid.
+        repo.branchFolder.addFile(newBranchName);
+        repo.branchFolder.setHeadUid(newBranchName, repo.getCurrHeadUid());
 
-        Repo.logFolder.addFile(newBranchName);
-        Repo.logFolder.writeLogToBranch(newBranchName, Repo.getCurrCommit());
+        // add new branch and set its latest commit uid.
+        repo.latestFolder.addFile(newBranchName);
+        repo.latestFolder.setLatestUid(newBranchName, repo.getCurrHeadUid());
 
-        Repo.branchLatestFolder.addFile(newBranchName);
-        Repo.branchLatestFolder.writeLatestCommit(newBranchName, Repo.getCurrHeadUid());
+        repo.logFolder.addFile(newBranchName);
+        repo.logFolder.writeLogToBranch(newBranchName, repo.getCurrCommit());
     }
 
-    /** Branch name. */
+    /**
+     * Branch name.
+     */
     private final String newBranchName;
 }

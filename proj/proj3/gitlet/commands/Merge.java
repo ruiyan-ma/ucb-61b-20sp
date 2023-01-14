@@ -2,12 +2,13 @@ package gitlet.commands;
 
 import gitlet.Main;
 import gitlet.objects.CommitData;
-import gitlet.repo.Repo;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
+
+import static gitlet.Main.repo;
 
 /**
  * This class is the merge command class.
@@ -24,19 +25,19 @@ public class Merge extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        otherBranch = _operands[0];
-        message = "Merged " + otherBranch + " into " + Repo.getCurrBranch() + ".";
+        otherBranch = operands[0];
+        message = "Merged " + otherBranch + " into " + repo.getCurrBranch() + ".";
     }
 
     @Override
     void checkOperands() {
-        if (!Repo.getStage().additionMap.isEmpty() || !Repo.getStage().removalSet.isEmpty()) {
+        if (!repo.getStage().additionMap.isEmpty() || !repo.getStage().removalSet.isEmpty()) {
             Main.exitWithError("You have uncommitted changes.");
         }
-        if (!Repo.branchFolder.hasBranch(otherBranch)) {
+        if (!repo.branchFolder.hasBranch(otherBranch)) {
             Main.exitWithError("A branch with that name does not exist.");
         }
-        if (Repo.getCurrBranch().equals(otherBranch)) {
+        if (repo.getCurrBranch().equals(otherBranch)) {
             Main.exitWithError("Cannot merge a branch with itself.");
         }
     }
@@ -47,21 +48,21 @@ public class Merge extends Command {
         String splitPointUid = findSplitUid();
         assert splitPointUid != null;
 
-        if (splitPointUid.equals(Repo.branchFolder.getHeadUid(otherBranch))) {
+        if (splitPointUid.equals(repo.branchFolder.getHeadUid(otherBranch))) {
             System.out.println("Given branch is an ancestor of the current branch.");
             return;
         }
 
-        if (splitPointUid.equals(Repo.getCurrHeadUid())) {
+        if (splitPointUid.equals(repo.getCurrHeadUid())) {
             Command checkout = new Checkout(createArgs("checkout " + otherBranch));
             checkout.run();
             System.out.println("Current branch fast-forward.");
             return;
         }
 
-        otherHeadUid = Repo.branchFolder.getHeadUid(otherBranch);
-        otherBranchCommit = Repo.objectFolder.getCommit(otherHeadUid);
-        splitPoint = Repo.objectFolder.getCommit(splitPointUid);
+        otherHeadUid = repo.branchFolder.getHeadUid(otherBranch);
+        otherBranchCommit = repo.objectFolder.getCommit(otherHeadUid);
+        splitPoint = repo.objectFolder.getCommit(splitPointUid);
         mergeNotConflict();
 
         boolean existConflict = mergeConflict();
@@ -81,7 +82,7 @@ public class Merge extends Command {
      */
     private void mergeNotConflict() throws IOException {
         Set<String> modifiedInOther = otherBranchCommit.getInterDiffFiles(splitPoint);
-        Set<String> modifiedInCurr = Repo.getCurrCommit().getInterDiffFiles(splitPoint);
+        Set<String> modifiedInCurr = repo.getCurrCommit().getInterDiffFiles(splitPoint);
         Set<String> modifiedOnlyInOther = new HashSet<>(modifiedInOther);
         modifiedOnlyInOther.removeAll(modifiedInCurr);
         for (String fileName : modifiedOnlyInOther) {
@@ -89,7 +90,7 @@ public class Merge extends Command {
         }
 
         Set<String> notInSplitButInOther = otherBranchCommit.getDiffSet(splitPoint);
-        Set<String> notInSplitButInCurr = Repo.getCurrCommit().getDiffFiles(splitPoint);
+        Set<String> notInSplitButInCurr = repo.getCurrCommit().getDiffFiles(splitPoint);
         Set<String> notInSplitButOnlyInOther = new HashSet<>(notInSplitButInOther);
         notInSplitButOnlyInOther.removeAll(notInSplitButInCurr);
         for (String fileName : notInSplitButOnlyInOther) {
@@ -97,13 +98,13 @@ public class Merge extends Command {
         }
 
         Set<String> inSplitButNotInOther = splitPoint.getDiffSet(otherBranchCommit);
-        inSplitButNotInOther.removeAll(Repo.getCurrCommit().getDiffFiles(splitPoint));
+        inSplitButNotInOther.removeAll(repo.getCurrCommit().getDiffFiles(splitPoint));
 
         for (String fileName : inSplitButNotInOther) {
             checkUntrackedFile(fileName);
             Command remove = new Rm(createArgs("rm " + fileName));
             remove.run();
-            Repo.update();
+            repo.update();
         }
     }
 
@@ -112,24 +113,24 @@ public class Merge extends Command {
      */
     private boolean mergeConflict() throws IOException {
         Set<String> modifiedInOther = otherBranchCommit.getInterDiffFiles(splitPoint);
-        Set<String> modifiedInCurr = Repo.getCurrCommit().getInterDiffFiles(splitPoint);
+        Set<String> modifiedInCurr = repo.getCurrCommit().getInterDiffFiles(splitPoint);
         Set<String> bothModified = new HashSet<>(modifiedInCurr);
         bothModified.retainAll(modifiedInOther);
 
-        Set<String> notInSplitButInBoth = Repo.getCurrCommit().getInterSet(otherBranchCommit);
+        Set<String> notInSplitButInBoth = repo.getCurrCommit().getInterSet(otherBranchCommit);
         notInSplitButInBoth.removeAll(splitPoint.getAllFileName());
 
-        Set<String> diffModifiedFiles = Repo.getCurrCommit().getInterDiffFiles(otherBranchCommit);
+        Set<String> diffModifiedFiles = repo.getCurrCommit().getInterDiffFiles(otherBranchCommit);
         Set<String> allFilesLeft = new HashSet<>(bothModified);
         allFilesLeft.addAll(notInSplitButInBoth);
         diffModifiedFiles.retainAll(allFilesLeft);
 
-        Set<String> modifiedInCurrDelInOther = Repo.getCurrCommit().getInterDiffFiles(splitPoint);
+        Set<String> modifiedInCurrDelInOther = repo.getCurrCommit().getInterDiffFiles(splitPoint);
         modifiedInCurrDelInOther.removeAll(otherBranchCommit.getAllFileName());
         diffModifiedFiles.addAll(modifiedInCurrDelInOther);
 
         Set<String> modifiedInOtherDelInCurr = otherBranchCommit.getInterDiffFiles(splitPoint);
-        modifiedInOtherDelInCurr.removeAll(Repo.getCurrCommit().getAllFileName());
+        modifiedInOtherDelInCurr.removeAll(repo.getCurrCommit().getAllFileName());
         diffModifiedFiles.addAll(modifiedInOtherDelInCurr);
 
         if (diffModifiedFiles.isEmpty()) {
@@ -149,17 +150,17 @@ public class Merge extends Command {
     private void writeConflictFile(String fileName) throws IOException {
         checkUntrackedFile(fileName);
         String content = "<<<<<<< HEAD\n";
-        if (Repo.getCurrCommit().containsFile(fileName)) {
-            content += Repo.objectFolder.getBolb(Repo.getCurrCommit(), fileName).getContent();
+        if (repo.getCurrCommit().containsFile(fileName)) {
+            content += repo.objectFolder.getBolb(repo.getCurrCommit(), fileName).getContent();
         }
 
         content += "=======\n";
         if (otherBranchCommit.containsFile(fileName)) {
-            content += Repo.objectFolder.getBolb(otherBranchCommit, fileName).getContent();
+            content += repo.objectFolder.getBolb(otherBranchCommit, fileName).getContent();
         }
 
         content += ">>>>>>>\n";
-        Repo.workFolder.writeToFile(fileName, content);
+        repo.workFolder.writeToFile(fileName, content);
         Command add = new Add(createArgs("add " + fileName));
         add.run();
     }
@@ -169,10 +170,10 @@ public class Merge extends Command {
      * or delete.
      */
     private void checkUntrackedFile(String fileName) {
-        if (Repo.workFolder.checkExist(fileName)) {
-            if ((!Repo.currCommitContainsFile(fileName)
-                    && !Repo.getStage().additionMap.containsKey(fileName))
-                    || Repo.getStage().removalSet.contains(fileName)) {
+        if (repo.workFolder.checkExist(fileName)) {
+            if ((!repo.getCurrCommit().containsFile(fileName)
+                    && !repo.getStage().additionMap.containsKey(fileName))
+                    || repo.getStage().removalSet.contains(fileName)) {
                 Main.exitWithError("There is an untracked file in the way; delete it, " +
                         "or add and commit it first.");
             }
@@ -188,7 +189,7 @@ public class Merge extends Command {
         checkout.run();
         Command add = new Add(createArgs("add " + fileName));
         add.run();
-        Repo.update();
+        repo.update();
     }
 
     /**
@@ -203,14 +204,15 @@ public class Merge extends Command {
      * Return the uid of the split point.
      */
     private String findSplitUid() {
-        Queue<CommitData> history = Repo.getHistoryOfCurrCommit();
+//        Queue<CommitData> history = repo.objectFolder.getHistoryOfCommit(repo.getCurrCommit());
+        Queue<CommitData> history = repo.getCurrCommit().getHistoryCommit();
         HashSet<String> historyOfCurrBranch = new HashSet<>();
 
         for (CommitData commitData : history) {
             historyOfCurrBranch.add(commitData.getUID());
         }
 
-        Queue<CommitData> historyOfGivenBranch = Repo.branchFolder.getHistoryOfBranch(otherBranch);
+        Queue<CommitData> historyOfGivenBranch = repo.branchFolder.getHistoryOfBranch(otherBranch);
         while (!historyOfGivenBranch.isEmpty()) {
             CommitData commitData = historyOfGivenBranch.remove();
             if (historyOfCurrBranch.contains(commitData.getUID())) {

@@ -21,7 +21,7 @@ public abstract class Command {
     Command(String[] args, int operandsNum) {
         commandName = args[0];
         if (args.length > 1) {
-            _operands = Arrays.copyOfRange(args, 1, args.length);
+            operands = Arrays.copyOfRange(args, 1, args.length);
         }
         this.operandsNum = operandsNum;
     }
@@ -32,7 +32,7 @@ public abstract class Command {
     Command(String[] args) {
         commandName = args[0];
         if (args.length > 1) {
-            _operands = Arrays.copyOfRange(args, 1, args.length);
+            operands = Arrays.copyOfRange(args, 1, args.length);
         }
     }
 
@@ -40,12 +40,12 @@ public abstract class Command {
      * Check the number of operands correct or not.
      */
     void checkOperandsNum() {
-        if (_operands == null) {
+        if (operands == null) {
             if (operandsNum != 0) {
                 Main.exitWithError("Incorrect operands.");
             }
         } else {
-            if (operandsNum != _operands.length) {
+            if (operandsNum != operands.length) {
                 Main.exitWithError("Incorrect operands.");
             }
         }
@@ -78,7 +78,7 @@ public abstract class Command {
     /**
      * Operands of this command, got from args.
      */
-    protected String[] _operands = null;
+    protected String[] operands = null;
 
     /**
      * Expected number of operands of this command.

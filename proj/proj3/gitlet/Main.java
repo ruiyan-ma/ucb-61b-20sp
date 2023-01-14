@@ -17,6 +17,8 @@ import java.io.IOException;
 
 public class Main {
 
+    public static Repo repo = new Repo();
+
     /**
      * The main process of gitlet with ARGS.
      */
@@ -25,9 +27,6 @@ public class Main {
             exitWithError("Please enter a command.");
         }
         chooseCommand(args);
-        if (Repo.getStage() != null) {
-            Repo.getStage().save();
-        }
     }
 
     /**
@@ -90,6 +89,10 @@ public class Main {
                 cmd.run();
             }
             default -> exitWithError("No command with that name exists.");
+        }
+
+        if (repo.getStage() != null) {
+            repo.getStage().save();
         }
     }
 

@@ -2,22 +2,29 @@ package gitlet.commands;
 
 import gitlet.Main;
 import gitlet.objects.CommitData;
-import gitlet.repo.Repo;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-/** This class is the find command class.
- *  @author ryan ma
- *  */
+import static gitlet.Main.repo;
+
+/**
+ * This class is the find command class.
+ *
+ * @author ryan ma
+ */
 
 public class Find extends Command {
 
-    /** Constructor function with ARGS. */
+    /**
+     * Constructor function with ARGS.
+     */
     public Find(String[] args) {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        message = _operands[0];
+        message = operands[0];
     }
 
     @Override
@@ -28,28 +35,34 @@ public class Find extends Command {
     @Override
     public void run() {
         checkOperands();
-        List<String> branches = Repo.branchFolder.getAllBranches();
-        StringBuilder find = new StringBuilder();
+
+        // get all branches
+        List<String> branches = repo.latestFolder.getAllBranches();
+        Set<String> uidSet = new HashSet<>();
         assert branches != null;
 
         for (String branch : branches) {
-            CommitData commit = Repo.branchLatestFolder.getLatestCommit(branch);
-            while (commit != null) {
+            // get the latest commit uid of this branch
+            String latestUid = repo.latestFolder.getLatestUid(branch);
+            CommitData latest = repo.objectFolder.getCommit(latestUid);
+            for (CommitData commit : latest.getHistoryCommit()) {
                 if (commit.getMessage().equals(message)) {
-                    find.append(commit.getUID()).append("\n");
+                    uidSet.add(commit.getUID());
                 }
-                commit = commit.getParent();
             }
         }
 
-        if (find.toString().equals("")) {
+        if (uidSet.isEmpty()) {
             Main.exitWithError("Found no commit with that message.");
         } else {
-            System.out.print(find);
+            for (String uid : uidSet) {
+                System.out.println(uid);
+            }
         }
     }
 
-    /** Commit message. */
+    /**
+     * Commit message.
+     */
     private final String message;
-
 }

@@ -2,9 +2,10 @@ package gitlet.commands;
 
 import gitlet.objects.CommitData;
 import gitlet.Main;
-import gitlet.repo.Repo;
 
 import java.io.IOException;
+
+import static gitlet.Main.repo;
 
 /** This class is the reset command class.
  *  @author ryan ma
@@ -17,12 +18,12 @@ public class Reset extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        commitId = _operands[0];
+        commitId = operands[0];
     }
 
     @Override
     void checkOperands() {
-        if (!Repo.objectFolder.containsCommit(commitId)) {
+        if (!repo.objectFolder.containsCommit(commitId)) {
             Main.exitWithError("No commit with that id exists.");
         }
     }
@@ -30,16 +31,18 @@ public class Reset extends Command {
     @Override
     public void run() throws IOException {
         checkOperands();
-        CommitData commit = Repo.objectFolder.getCommit(commitId);
-        if (Repo.workFolder.canNotCheckoutAllFiles(commit)) {
+
+        CommitData commit = repo.objectFolder.getCommit(commitId);
+        assert commit != null;
+        if (repo.workFolder.canNotCheckoutAllFiles(commit)) {
             Main.exitWithError("There is an untracked file in the "
                                + "way; delete it, or add and commit it first.");
         }
-        assert commit != null;
-        Repo.workFolder.checkoutAllFilesWithCommit(commit);
-        Repo.branchFolder.setHeadUid(Repo.getCurrBranch(), commit.getUID());
-        Repo.getStage().clean();
-        Repo.getStage().save();
+
+        repo.workFolder.checkoutAllFilesWithCommit(commit);
+        repo.setCurrHeadUid(commit.getUID());
+        repo.getStage().clean();
+        repo.getStage().save();
     }
 
     /** Commit id. */

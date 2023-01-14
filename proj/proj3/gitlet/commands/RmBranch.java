@@ -1,7 +1,8 @@
 package gitlet.commands;
 
 import gitlet.Main;
-import gitlet.repo.Repo;
+
+import static gitlet.Main.repo;
 
 /** This class is the rm branch command class.
  *  @author ryan ma
@@ -14,15 +15,15 @@ public class RmBranch extends Command {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
-        delBranch = _operands[0];
+        delBranch = operands[0];
     }
 
     @Override
     void checkOperands() {
-        if (!Repo.branchFolder.hasBranch(delBranch)) {
+        if (!repo.branchFolder.hasBranch(delBranch)) {
             Main.exitWithError("A branch with that name does not exist.");
         }
-        if (Repo.getCurrBranch().equals(delBranch)) {
+        if (repo.getCurrBranch().equals(delBranch)) {
             Main.exitWithError("Cannot remove the current branch.");
         }
     }
@@ -30,7 +31,7 @@ public class RmBranch extends Command {
     @Override
     public void run() {
         checkOperands();
-        Repo.branchFolder.deleteBranch(delBranch);
+        repo.branchFolder.deleteBranch(delBranch);
     }
 
     /** Branch name. */

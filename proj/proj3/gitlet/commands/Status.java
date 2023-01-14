@@ -1,10 +1,11 @@
 package gitlet.commands;
 
-import gitlet.repo.Repo;
 
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import static gitlet.Main.repo;
 
 /** This class is the status command class.
  *  @author ryan ma
@@ -43,8 +44,8 @@ public class Status extends Command {
     /** Return branch status. */
     private String branchStatus() {
         StringBuilder status = new StringBuilder("=== Branches ===\n");
-        List<String> branches = Repo.branchFolder.getAllBranches();
-        String currBranch = Repo.getCurrBranch();
+        List<String> branches = repo.branchFolder.getAllBranches();
+        String currBranch = repo.getCurrBranch();
         for (String branch : branches) {
             if (!branch.contentEquals(currBranch)) {
                 status.append(branch).append("\n");
@@ -59,7 +60,7 @@ public class Status extends Command {
     /** Return staged files status. */
     private String stagedFileStatus() {
         StringBuilder status = new StringBuilder("=== Staged Files ===\n");
-        Set<String> set = Repo.getStage().additionMap.keySet();
+        Set<String> set = repo.getStage().additionMap.keySet();
         for (String file : set) {
             status.append(file).append("\n");
         }
@@ -70,7 +71,7 @@ public class Status extends Command {
     /** Return removed files status. */
     private String removedFileStatus() {
         StringBuilder status = new StringBuilder("=== Removed Files ===\n");
-        Set<String> set = Repo.getStage().removalSet;
+        Set<String> set = repo.getStage().removalSet;
         for (String file : set) {
             status.append(file).append("\n");
         }
@@ -84,22 +85,22 @@ public class Status extends Command {
             "=== Modifications Not Staged For Commit ===\n");
         TreeSet<String> set = new TreeSet<>();
 
-        for (String fileName: Repo.getCurrCommit().getAllFileName()) {
-            if (!Repo.workFolder.checkExist(fileName)) {
-                if (!Repo.getStage().removalSet.contains(fileName)) {
+        for (String fileName: repo.getCurrCommit().getAllFileName()) {
+            if (!repo.workFolder.checkExist(fileName)) {
+                if (!repo.getStage().removalSet.contains(fileName)) {
                     set.add(fileName + " (deleted)\n");
                 }
-            } else if (!Repo.currCommitSameFile(fileName)
-                       && !Repo.getStage().additionMap.containsKey(fileName)) {
+            } else if (!repo.workFolder.compareFile(fileName, repo.getCurrCommit().getBolbUID(fileName))
+                       && !repo.getStage().additionMap.containsKey(fileName)) {
                 set.add(fileName + " (modified)\n");
             }
         }
 
-        Set<String> stageSet = Repo.getStage().additionMap.keySet();
+        Set<String> stageSet = repo.getStage().additionMap.keySet();
         for (String file : stageSet) {
-            if (!Repo.workFolder.checkExist(file)) {
+            if (!repo.workFolder.checkExist(file)) {
                 set.add(file + " (deleted)\n");
-            } else if (Repo.stageNotContainSameFile(file)) {
+            } else if (!repo.workFolder.compareFile(file, repo.getStage().getBolbUid(file))) {
                 set.add(file + " (modified)\n");
             }
         }
@@ -115,12 +116,12 @@ public class Status extends Command {
     /** Return untracked files status. */
     private String untrackedFileStatus() {
         StringBuilder status = new StringBuilder("=== Untracked Files ===\n");
-        List<String> files = Repo.workFolder.getAllFileName();
+        List<String> files = repo.workFolder.getAllFileName();
         assert files != null;
         for (String file : files) {
-            if ((!Repo.currCommitContainsFile(file)
-                    && !Repo.getStage().additionMap.containsKey(file))
-                    || Repo.getStage().removalSet.contains(file)) {
+            if ((!repo.getCurrCommit().containsFile(file)
+                    && !repo.getStage().additionMap.containsKey(file))
+                    || repo.getStage().removalSet.contains(file)) {
                 status.append(file).append("\n");
             }
         }

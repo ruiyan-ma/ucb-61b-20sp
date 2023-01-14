@@ -1,13 +1,14 @@
 package gitlet.repo;
 
-import gitlet.objects.*;
 import gitlet.Utils;
+import gitlet.objects.Bolb;
+import gitlet.objects.CommitData;
+import gitlet.objects.GitletException;
+import gitlet.objects.GitletObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 /**
  * This class represents the object dir in .gitlet.
@@ -37,7 +38,7 @@ public class ObjectFolder extends Folder {
      * @param uid: the uid of this object file.
      * @return the object file.
      */
-    public File getObjectFile(String uid) {
+    private File getObjectFile(String uid) {
         if (uid.length() == LENGTH) {
             return getFileWithFullUID(uid);
         } else if (uid.length() < LENGTH) {
@@ -81,7 +82,7 @@ public class ObjectFolder extends Folder {
     }
 
     /**
-     * Return the bolb of file FILENAME in the given commit.
+     * Return the bolb in the given commit.
      */
     public Bolb getBolb(CommitData commit, String fileName) {
         String uid = commit.getBolbUID(fileName);
@@ -105,30 +106,6 @@ public class ObjectFolder extends Folder {
      */
     public boolean containsCommit(String uid) {
         return getObjectFile(uid).exists();
-    }
-
-    /**
-     * Return a queue of all history commits of the given commit.
-     */
-    Queue<CommitData> getHistoryOfCommit(CommitData commitData) {
-        /* Use BFS algorithm to retrieve commit tree. */
-        Queue<CommitData> queue = new LinkedList<>();
-        Queue<CommitData> history = new LinkedList<>();
-        queue.add(commitData);
-
-        while (!queue.isEmpty()) {
-            CommitData commit = queue.poll();
-            history.add(commit);
-
-            if (commit.hasParent()) {
-                queue.add(commit.getParent());
-            }
-
-            if (commit.hasSecParent()) {
-                queue.add(commit.getSecParent());
-            }
-        }
-        return history;
     }
 
     /**

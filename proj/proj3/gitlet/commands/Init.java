@@ -4,10 +4,11 @@ import gitlet.Main;
 import gitlet.Utils;
 import gitlet.objects.CommitData;
 import gitlet.objects.Stage;
-import gitlet.repo.Repo;
 
 import java.io.File;
 import java.io.IOException;
+
+import static gitlet.Main.repo;
 
 /**
  * This class is the init command class.
@@ -30,9 +31,8 @@ public class Init extends Command {
 
     @Override
     void checkOperands() {
-        if (Repo.GITLET_FOLDER.exists()) {
-            Main.exitWithError("A Gitlet version-control "
-                    + "system already exists "
+        if (repo.GITLET_FOLDER.exists()) {
+            Main.exitWithError("A Gitlet version-control system already exists "
                     + "in the current directory.");
         }
     }
@@ -51,33 +51,34 @@ public class Init extends Command {
     private void createRoot() throws IOException {
         CommitData root = new CommitData("initial commit");
         String rootUID = root.getUID();
-        Repo.objectFolder.save(root);
-        Repo.branchFolder.setHeadUid("master", rootUID);
-        Repo.setCurrBranch("master");
-        Repo.logFolder.writeLogToBranch("master", root);
-        Repo.branchLatestFolder.writeLatestCommit("master", rootUID);
+        repo.objectFolder.save(root);
+
+        repo.branchFolder.setHeadUid("master", rootUID);
+        repo.setCurrBranch("master");
+        repo.logFolder.writeLogToBranch("master", root);
+        repo.latestFolder.setLatestUid("master", rootUID);
     }
 
     /**
      * Create branch master.
      */
     private void createMaster() throws IOException {
-        Repo.branchFolder.addFile("master");
-        Repo.logFolder.addFile("master");
-        Repo.branchLatestFolder.addFile("master");
+        repo.branchFolder.addFile("master");
+        repo.logFolder.addFile("master");
+        repo.latestFolder.addFile("master");
     }
 
     /**
      * Create all.
      */
     private void createAll() throws IOException {
-        Repo.GITLET_FOLDER.mkdir();
-        Repo.HEAD_FILE.createNewFile();
+        repo.GITLET_FOLDER.mkdir();
+        repo.HEAD_FILE.createNewFile();
         createIndexFile();
         createRefsFolder();
         createObjectsFolder();
         createLogFolder();
-        Repo.branchLatestFolder.folder.mkdir();
+        repo.latestFolder.folder.mkdir();
     }
 
     /**
@@ -93,16 +94,16 @@ public class Init extends Command {
      * Create objects folder.
      */
     private void createObjectsFolder() {
-        Repo.objectFolder.folder.mkdir();
-        Repo.objectFolder.addFolder("info");
-        Repo.objectFolder.addFolder("pack");
+        repo.objectFolder.folder.mkdir();
+        repo.objectFolder.addFolder("info");
+        repo.objectFolder.addFolder("pack");
     }
 
     /**
      * Create refs folder.
      */
     private void createRefsFolder() {
-        File refs = Utils.join(Repo.GITLET_FOLDER, "refs");
+        File refs = Utils.join(repo.GITLET_FOLDER, "refs");
         refs.mkdir();
         File heads = Utils.join(refs, "heads");
         heads.mkdir();
@@ -114,7 +115,7 @@ public class Init extends Command {
      * Create log folder.
      */
     private void createLogFolder() {
-        File logs = Utils.join(Repo.GITLET_FOLDER, "logs");
+        File logs = Utils.join(repo.GITLET_FOLDER, "logs");
         logs.mkdir();
         File refs = Utils.join(logs, "refs");
         refs.mkdir();

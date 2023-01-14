@@ -31,15 +31,8 @@ public class Stage implements Serializable {
         removalSet = new TreeSet<>();
     }
 
-    /**
-     * Return true if the file FILENAME in staging area has the
-     * same UID with UID.
-     */
-    public boolean compareFile(String fileName, String uid) {
-        if (!additionMap.containsKey(fileName)) {
-            return false;
-        }
-        return additionMap.get(fileName).equals(uid);
+    public String getBolbUid(String fileName) {
+        return additionMap.get(fileName);
     }
 
     /**
