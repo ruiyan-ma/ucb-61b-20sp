@@ -1,16 +1,23 @@
-package gitlet;
+package gitlet.commands;
+
+import gitlet.Main;
+import gitlet.repo.Repo;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-/** This class is the abstract class of all commands, defines some
- *  abstract function for all commands to implement.
- *  @author ryan ma
- *  */
+/**
+ * This class is the abstract class of all commands, defines some
+ * abstract function for all commands to implement.
+ *
+ * @author ryan ma
+ */
 
-abstract class Command {
+public abstract class Command {
 
-    /** Constructor function with ARGS and OPERANDSNUM. */
+    /**
+     * Constructor function with args and operands number.
+     */
     Command(String[] args, int operandsNum) {
         _name = args[0];
         if (args.length > 1) {
@@ -19,7 +26,9 @@ abstract class Command {
         _operandsNum = operandsNum;
     }
 
-    /** Constructor function for checkout command with ARGS. */
+    /**
+     * Constructor function for checkout command with ARGS.
+     */
     Command(String[] args) {
         _name = args[0];
         if (args.length > 1) {
@@ -27,7 +36,9 @@ abstract class Command {
         }
     }
 
-    /** Check the number of operands correct or not. */
+    /**
+     * Check the number of operands correct or not.
+     */
     void checkOperandsNum() {
         if (_operands == null) {
             if (_operandsNum != 0) {
@@ -40,26 +51,38 @@ abstract class Command {
         }
     }
 
-    /** Check whether initialized. */
+    /**
+     * Check whether initialized.
+     */
     void checkInitial() {
         if (!Repo.GITLET_FOLDER.exists()) {
             Main.exitWithError("Not in an initialized Gitlet directory.");
         }
     }
 
-    /** Check operands correct or not. */
+    /**
+     * Check operands correct or not.
+     */
     abstract void checkOperands();
 
-    /** Run this command. */
-    abstract void run() throws IOException;
+    /**
+     * Run this command.
+     */
+    public abstract void run() throws IOException;
 
-    /** The name of this command. */
+    /**
+     * The name of this command.
+     */
     protected String _name;
 
-    /** Operands of this command, got from args. */
+    /**
+     * Operands of this command, got from args.
+     */
     protected String[] _operands = null;
 
-    /** Expected number of operands of this command. */
+    /**
+     * Expected number of operands of this command.
+     */
     protected int _operandsNum;
 
 }

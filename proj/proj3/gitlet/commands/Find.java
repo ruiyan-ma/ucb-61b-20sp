@@ -1,4 +1,8 @@
-package gitlet;
+package gitlet.commands;
+
+import gitlet.Main;
+import gitlet.objects.CommitData;
+import gitlet.repo.Repo;
 
 import java.util.List;
 
@@ -6,10 +10,10 @@ import java.util.List;
  *  @author ryan ma
  *  */
 
-class Find extends Command {
+public class Find extends Command {
 
     /** Constructor function with ARGS. */
-    Find(String[] args) {
+    public Find(String[] args) {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
@@ -22,14 +26,13 @@ class Find extends Command {
     }
 
     @Override
-    void run() {
+    public void run() {
         checkOperands();
-        List<String> branches = Repo.getBranchDir().getAllBranches();
+        List<String> branches = Repo.branchFolder.getAllBranches();
         StringBuilder find = new StringBuilder();
         assert branches != null;
         for (String branch : branches) {
-            CommitData commit =
-                Repo.getBranchLatestDir().getLatestCommit(branch);
+            CommitData commit = Repo.branchLatestFolder.getLatestCommit(branch);
             while (commit != null) {
                 if (commit.getMessage().equals(_message)) {
                     find.append(commit.getUID()).append("\n");

@@ -1,4 +1,8 @@
-package gitlet;
+package gitlet.commands;
+
+import gitlet.objects.CommitData;
+import gitlet.Main;
+import gitlet.repo.Repo;
 
 import java.io.IOException;
 
@@ -6,10 +10,10 @@ import java.io.IOException;
  *  @author ryan ma
  *  */
 
-class Commit extends Command {
+public class Commit extends Command {
 
     /** Constructor function with ARGS. */
-    Commit(String[] args) {
+    public Commit(String[] args) {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
@@ -28,7 +32,7 @@ class Commit extends Command {
 
     @Override
     void checkOperands() {
-        if (Repo.getStage().isAddEmpty() && Repo.getStage().isRmEmpty()) {
+        if (Repo.getStage().additionMap.isEmpty() && Repo.getStage().removalSet.isEmpty()) {
             Main.exitWithError("No changes added to the commit.");
         }
         if (_message.equals("")) {
@@ -37,24 +41,22 @@ class Commit extends Command {
     }
 
     @Override
-    void run() throws IOException {
+    public void run() throws IOException {
         checkOperands();
         CommitData commitData;
         if (_secParent != null) {
-            commitData = new CommitData(
-                _message, Repo.getCurrHead(), _secParent, Repo.getStage());
+            commitData = new CommitData(_message, Repo.getCurrHeadUid(), _secParent, Repo.getStage());
         } else {
-            commitData = new CommitData(
-                _message, Repo.getCurrHead(), Repo.getStage());
+            commitData = new CommitData(_message, Repo.getCurrHeadUid(), Repo.getStage());
         }
-        Repo.changeCurrCommit(commitData);
+        Repo.setCurrCommit(commitData);
         String uid = commitData.getUID();
-        Repo.changeCurrBranchHead(uid);
-        Repo.getBranchLatestDir().writeLatestCommit(Repo.getCurrBranch(), uid);
+        Repo.setCurrHeadUid(uid);
+        Repo.branchLatestFolder.writeLatestCommit(Repo.getCurrBranch(), uid);
         Repo.writeLogToCurrBranch();
         Repo.getStage().clean();
         Repo.getStage().save();
-        Repo.getCurrCommit().save();
+        Repo.objectFolder.save(Repo.getCurrCommit());
     }
 
     /** Commit message. */

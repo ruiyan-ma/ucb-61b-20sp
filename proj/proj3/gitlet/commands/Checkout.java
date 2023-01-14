@@ -1,4 +1,8 @@
-package gitlet;
+package gitlet.commands;
+
+import gitlet.Main;
+import gitlet.objects.CommitData;
+import gitlet.repo.Repo;
 
 import java.io.IOException;
 
@@ -6,10 +10,10 @@ import java.io.IOException;
  *  @author ryan ma
  *  */
 
-class Checkout extends Command {
+public class Checkout extends Command {
 
     /** Constructor function with ARGS. */
-    Checkout(String[] args) {
+    public Checkout(String[] args) {
         super(args);
         checkInitial();
         if (_operands.length == 1) {
@@ -28,7 +32,7 @@ class Checkout extends Command {
     void checkOperands() {
         checkInitial();
         if (_operands.length == 1) {
-            if (!Repo.getBranchDir().containsBranch(_branch)) {
+            if (!Repo.branchFolder.hasBranch(_branch)) {
                 Main.exitWithError("No such branch exist.");
             }
             if (Repo.getCurrBranch().equals(_branch)) {
@@ -45,36 +49,33 @@ class Checkout extends Command {
             if (!_operands[1].equals("--")) {
                 Main.exitWithError("Incorrect operands.");
             }
-            if (!Repo.getObjectDir().containsCommit(_id)) {
+            if (!Repo.objectFolder.containsCommit(_id)) {
                 Main.exitWithError("No commit with that id exists.");
-            } else if (!Repo.getObjectDir().commitContainsFile(_id, _file)) {
+            } else if (!Repo.objectFolder.getCommit(_id).containsFile(_file)) {
                 Main.exitWithError("File does not exist in that commit.");
             }
         }
     }
 
     @Override
-    void run() throws IOException {
+    public void run() throws IOException {
         checkOperands();
         if (_operands.length == 1) {
-            String branchHeadUID = Repo.getBranchDir().getHeadOfBranch(_branch);
-            CommitData branchHead = Repo.getObjectDir().getCommit(
-                                        branchHeadUID);
-            if (Repo.getWorkDir().conditionForCheckoutAllFiles(branchHead)) {
+            String branchHeadUID = Repo.branchFolder.getHeadUid(_branch);
+            CommitData branchHead = Repo.objectFolder.getCommit(branchHeadUID);
+            if (Repo.workFolder.canNotCheckoutAllFiles(branchHead)) {
                 Main.exitWithError("There is an untracked file in the "
                                    + "way; delete it, or add and "
                                    + "commit it first.");
             }
-            Repo.getWorkDir().checkoutAllFilesWithCommit(
-                Repo.getObjectDir().getCommit(branchHeadUID));
-            Repo.changeCurrBranch(_branch);
+            Repo.workFolder.checkoutAllFilesWithCommit(Repo.objectFolder.getCommit(branchHeadUID));
+            Repo.setCurrBranch(_branch);
             Repo.getStage().clean();
             Repo.getStage().save();
         } else if (_operands.length == 2) {
-            Repo.checkoutFileInCurrCommit(_file);
+            Repo.workFolder.checkoutFileWithCommit(Repo.getCurrCommit(), _file);
         } else if (_operands.length == 3) {
-            Repo.getWorkDir().checkoutFileInCommit(
-                Repo.getObjectDir().getCommit(_id), _file);
+            Repo.workFolder.checkoutFileWithCommit(Repo.objectFolder.getCommit(_id), _file);
         }
     }
 

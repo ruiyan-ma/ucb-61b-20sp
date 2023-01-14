@@ -1,4 +1,8 @@
-package gitlet;
+package gitlet.commands;
+
+import gitlet.objects.CommitData;
+import gitlet.Main;
+import gitlet.repo.Repo;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -8,10 +12,10 @@ import java.util.Set;
 /** This class is the merge command class.
  *  @author ryan ma */
 
-class Merge extends Command {
+public class Merge extends Command {
 
     /** Constructor function with ARGS. */
-    Merge(String[] args) {
+    public Merge(String[] args) {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
@@ -21,10 +25,10 @@ class Merge extends Command {
 
     @Override
     void checkOperands() {
-        if (!Repo.getStage().isAddEmpty() || !Repo.getStage().isRmEmpty()) {
-            Main.exitWithError("You have uncommited changes.");
+        if (!Repo.getStage().additionMap.isEmpty() || !Repo.getStage().removalSet.isEmpty()) {
+            Main.exitWithError("You have uncommitted changes.");
         }
-        if (!Repo.getBranchDir().containsBranch(_other)) {
+        if (!Repo.branchFolder.hasBranch(_other)) {
             Main.exitWithError("A branch with that name does not exist.");
         }
         if (Repo.getCurrBranch().equals(_other)) {
@@ -33,25 +37,25 @@ class Merge extends Command {
     }
 
     @Override
-    void run() throws IOException {
+    public void run() throws IOException {
         checkOperands();
         String splitPointUid = findSplitUid();
         assert splitPointUid != null;
         if (splitPointUid.equals(
-                    Repo.getBranchDir().getHeadOfBranch(_other))) {
+                    Repo.branchFolder.getHeadUid(_other))) {
             System.out.println("Given branch is an "
                                + "ancestor of the current branch.");
             return;
         }
-        if (splitPointUid.equals(Repo.getCurrHead())) {
+        if (splitPointUid.equals(Repo.getCurrHeadUid())) {
             Command checkout = new Checkout(createArgs("checkout " + _other));
             checkout.run();
             System.out.println("Current branch fast-forward.");
             return;
         }
-        _otherHeadUid = Repo.getBranchDir().getHeadOfBranch(_other);
-        _otherBranchCommit = Repo.getBranchDir().getCommitOfBranch(_other);
-        _splitPoint = Repo.getObjectDir().getCommit(splitPointUid);
+        _otherHeadUid = Repo.branchFolder.getHeadUid(_other);
+        _otherBranchCommit = Repo.objectFolder.getCommit(_otherHeadUid);
+        _splitPoint = Repo.objectFolder.getCommit(splitPointUid);
         mergeNotConflict();
         boolean existConflict = mergeConflict();
         String[] args = new String[2];
@@ -111,7 +115,7 @@ class Merge extends Command {
 
         Set<String> notInSplitButInBoth =
             Repo.getCurrCommit().getInterSet(_otherBranchCommit);
-        notInSplitButInBoth.removeAll(_splitPoint.getAllFiles());
+        notInSplitButInBoth.removeAll(_splitPoint.getAllFileName());
 
         Set<String> diffModifiedFiles =
             Repo.getCurrCommit().getInterDiffFiles(_otherBranchCommit);
@@ -121,13 +125,13 @@ class Merge extends Command {
 
         Set<String> modifiedInCurrDelInOther =
             Repo.getCurrCommit().getInterDiffFiles(_splitPoint);
-        modifiedInCurrDelInOther.removeAll(_otherBranchCommit.getAllFiles());
+        modifiedInCurrDelInOther.removeAll(_otherBranchCommit.getAllFileName());
         diffModifiedFiles.addAll(modifiedInCurrDelInOther);
 
         Set<String> modifiedInOtherDelInCurr =
             _otherBranchCommit.getInterDiffFiles(_splitPoint);
         modifiedInOtherDelInCurr.removeAll(
-            Repo.getCurrCommit().getAllFiles());
+            Repo.getCurrCommit().getAllFileName());
         diffModifiedFiles.addAll(modifiedInOtherDelInCurr);
 
         if (diffModifiedFiles.isEmpty()) {
@@ -143,17 +147,17 @@ class Merge extends Command {
     private void writeConflictFile(String fileName) throws IOException {
         checkUntrackedFile(fileName);
         String content = "<<<<<<< HEAD\n";
-        if (Repo.getCurrCommit().containFile(fileName)) {
-            content += Repo.getObjectDir().getBolbInCommit(
+        if (Repo.getCurrCommit().containsFile(fileName)) {
+            content += Repo.objectFolder.getBolb(
                            Repo.getCurrCommit(), fileName).getContent();
         }
         content += "=======\n";
-        if (_otherBranchCommit.containFile(fileName)) {
-            content += Repo.getObjectDir().getBolbInCommit(
+        if (_otherBranchCommit.containsFile(fileName)) {
+            content += Repo.objectFolder.getBolb(
                            _otherBranchCommit, fileName).getContent();
         }
         content += ">>>>>>>\n";
-        Repo.getWorkDir().writeToFile(fileName, content);
+        Repo.workFolder.writeToFile(fileName, content);
         Command add = new Add(createArgs("add " + fileName));
         add.run();
     }
@@ -161,10 +165,10 @@ class Merge extends Command {
     /** Check for untracked file FILENAME which will be overwritten
      *  or delete. */
     private void checkUntrackedFile(String fileName) {
-        if (Repo.getWorkDir().checkExist(fileName)) {
+        if (Repo.workFolder.checkExist(fileName)) {
             if ((!Repo.currCommitContainsFile(fileName)
-                    && !Repo.getStage().addContains(fileName))
-                    || Repo.getStage().rmContains(fileName)) {
+                    && !Repo.getStage().additionMap.containsKey(fileName))
+                    || Repo.getStage().removalSet.contains(fileName)) {
                 Main.exitWithError("There is an untracked file "
                                    + "in the way; delete it, "
                                    + "or add and commit it first.");
@@ -191,13 +195,12 @@ class Merge extends Command {
 
     /** Return the uid of the split point. */
     private String findSplitUid() {
-        Queue<CommitData> history = Repo.getHistoryOfCurrBranch();
+        Queue<CommitData> history = Repo.getHistoryOfCurrCommit();
         HashSet<String> historyOfCurrBranch = new HashSet<>();
         for (CommitData commitData : history) {
             historyOfCurrBranch.add(commitData.getUID());
         }
-        Queue<CommitData> historyOfGivenBranch =
-            Repo.getBranchDir().getHistoryOfBranch(_other);
+        Queue<CommitData> historyOfGivenBranch = Repo.branchFolder.getHistoryOfBranch(_other);
         while (!historyOfGivenBranch.isEmpty()) {
             CommitData commitData = historyOfGivenBranch.remove();
             if (historyOfCurrBranch.contains(commitData.getUID())) {

@@ -1,4 +1,7 @@
-package gitlet;
+package gitlet.commands;
+
+import gitlet.Main;
+import gitlet.repo.Repo;
 
 import java.io.IOException;
 
@@ -6,10 +9,10 @@ import java.io.IOException;
  *  @author ryan ma
  *  */
 
-class Rm extends Command {
+public class Rm extends Command {
 
     /** Constructor function with ARGS. */
-    Rm(String[] args) {
+    public Rm(String[] args) {
         super(args, 1);
         checkInitial();
         checkOperandsNum();
@@ -22,20 +25,24 @@ class Rm extends Command {
     }
 
     @Override
-    void run() throws IOException {
+    public void run() throws IOException {
         checkOperands();
-        boolean addContain = Repo.getStage().addContains(_file);
+        boolean addContain = Repo.getStage().additionMap.containsKey(_file);
         boolean commitContain = Repo.currCommitContainsFile(_file);
+
         if (addContain) {
-            Repo.getStage().rmEntryInAdd(_file);
+            Repo.getStage().additionMap.remove(_file);
         }
+
         if (commitContain) {
-            Repo.getStage().addToRm(_file);
-            Repo.getWorkDir().deleteFile(_file);
+            Repo.getStage().removalSet.add(_file);
+            Repo.workFolder.deleteFile(_file);
         }
+
         if (!addContain && !commitContain) {
             Main.exitWithError("No reason to remove the file.");
         }
+
         Repo.getStage().save();
     }
 

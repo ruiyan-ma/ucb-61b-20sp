@@ -1,5 +1,7 @@
 package gitlet;
 
+import gitlet.objects.GitletException;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -16,7 +18,7 @@ import java.util.List;
  *
  * @author P. N. Hilfinger
  */
-class Utils {
+public class Utils {
 
 	/* SHA-1 HASH VALUES. */
 
@@ -29,7 +31,7 @@ class Utils {
 	 * Returns the SHA-1 hash of the concatenation of VALS, which may
 	 * be any mixture of byte arrays and Strings.
 	 */
-	static String sha1(Object... vals) {
+	public static String sha1(Object... vals) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
 			for (Object val : vals) {
@@ -69,7 +71,7 @@ class Utils {
 	 * and throws IllegalArgumentException unless the directory designated by
 	 * FILE also contains a directory named .gitlet.
 	 */
-	static boolean restrictedDelete(File file) {
+	public static boolean restrictedDelete(File file) {
 		if (!(new File(file.getParentFile(), ".gitlet")).isDirectory()) {
 			throw new IllegalArgumentException(
 					"not .gitlet working directory");
@@ -115,7 +117,7 @@ class Utils {
 	 * be a normal file. Throws IllegalArgumentException
 	 * in case of problems.
 	 */
-	static String readContentsAsString(File file) {
+	public static String readContentsAsString(File file) {
 		return new String(readContents(file), StandardCharsets.UTF_8);
 	}
 
@@ -125,7 +127,7 @@ class Utils {
 	 * either a String or a byte array. Throws IllegalArgumentException
 	 * in case of problems.
 	 */
-	static void writeContents(File file, Object... contents) {
+	public static void writeContents(File file, Object... contents) {
 		try {
 			if (file.isDirectory()) {
 				throw new IllegalArgumentException(
@@ -150,8 +152,7 @@ class Utils {
 	 * Return an object of type T read from FILE, casting it to EXPECTEDCLASS.
 	 * Throws IllegalArgumentException in case of problems.
 	 */
-	static <T extends Serializable> T readObject(File file,
-												 Class<T> expectedClass) {
+	public static <T extends Serializable> T readObject(File file, Class<T> expectedClass) {
 		try {
 			ObjectInputStream in =
 					new ObjectInputStream(new FileInputStream(file));
@@ -167,7 +168,7 @@ class Utils {
 	/**
 	 * Write OBJ to FILE.
 	 */
-	static void writeObject(File file, Serializable obj) {
+	public static void writeObject(File file, Serializable obj) {
 		writeContents(file, serialize(obj));
 	}
 
@@ -188,7 +189,7 @@ class Utils {
 	 * lexicographic order as Java Strings.  Returns null if DIR does
 	 * not denote a directory.
 	 */
-	static List<String> plainFilenamesIn(File dir) {
+	public static List<String> plainFilenamesIn(File dir) {
 		String[] files = dir.list(PLAIN_FILES);
 		if (files == null) {
 			return null;
@@ -212,14 +213,14 @@ class Utils {
 	/**
 	 * Return the concatenation of FIRST and OTHERS into a File designator.
 	 */
-	static File join(String first, String... others) {
+	public static File join(String first, String... others) {
 		return Paths.get(first, others).toFile();
 	}
 
 	/**
 	 * Return the concatenation of FIRST and OTHERS into a File designator.
 	 */
-	static File join(File first, String... others) {
+	public static File join(File first, String... others) {
 		return Paths.get(first.getPath(), others).toFile();
 	}
 

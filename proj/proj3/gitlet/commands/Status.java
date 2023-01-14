@@ -1,18 +1,19 @@
-package gitlet;
+package gitlet.commands;
+
+import gitlet.repo.Repo;
 
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.TreeMap;
 
 /** This class is the status command class.
  *  @author ryan ma
  *  */
 
-class Status extends Command {
+public class Status extends Command {
 
     /** Constructor function with ARGS. */
-    Status(String[] args) {
+    public Status(String[] args) {
         super(args, 0);
         checkInitial();
         checkOperandsNum();
@@ -23,7 +24,7 @@ class Status extends Command {
     }
 
     @Override
-    void run() {
+    public void run() {
         checkOperands();
         String status = getStatus();
         System.out.print(status);
@@ -42,7 +43,7 @@ class Status extends Command {
     /** Return branch status. */
     private String branchStatus() {
         StringBuilder status = new StringBuilder("=== Branches ===\n");
-        List<String> branches = Repo.getBranchDir().getAllBranches();
+        List<String> branches = Repo.branchFolder.getAllBranches();
         String currBranch = Repo.getCurrBranch();
         for (String branch : branches) {
             if (!branch.contentEquals(currBranch)) {
@@ -58,7 +59,7 @@ class Status extends Command {
     /** Return staged files status. */
     private String stagedFileStatus() {
         StringBuilder status = new StringBuilder("=== Staged Files ===\n");
-        Set<String> set = Repo.getStage().getFilesInAdd();
+        Set<String> set = Repo.getStage().additionMap.keySet();
         for (String file : set) {
             status.append(file).append("\n");
         }
@@ -69,7 +70,7 @@ class Status extends Command {
     /** Return removed files status. */
     private String removedFileStatus() {
         StringBuilder status = new StringBuilder("=== Removed Files ===\n");
-        Set<String> set = Repo.getStage().getRemoval();
+        Set<String> set = Repo.getStage().removalSet;
         for (String file : set) {
             status.append(file).append("\n");
         }
@@ -82,28 +83,31 @@ class Status extends Command {
         StringBuilder status = new StringBuilder(
             "=== Modifications Not Staged For Commit ===\n");
         TreeSet<String> set = new TreeSet<>();
-        TreeMap<String, String> trackMap = Repo.getCurrCommitMap();
-        for (String file : trackMap.keySet()) {
-            if (!Repo.getWorkDir().checkExist(file)) {
-                if (!Repo.getStage().rmContains(file)) {
-                    set.add(file + " (deleted)\n");
+
+        for (String fileName: Repo.getCurrCommit().getAllFileName()) {
+            if (!Repo.workFolder.checkExist(fileName)) {
+                if (!Repo.getStage().removalSet.contains(fileName)) {
+                    set.add(fileName + " (deleted)\n");
                 }
-            } else if (!Repo.currCommitSameFile(file)
-                       && !Repo.getStage().addContains(file)) {
-                set.add(file + " (modified)\n");
+            } else if (!Repo.currCommitSameFile(fileName)
+                       && !Repo.getStage().additionMap.containsKey(fileName)) {
+                set.add(fileName + " (modified)\n");
             }
         }
-        Set<String> stageSet = Repo.getStage().getFilesInAdd();
+
+        Set<String> stageSet = Repo.getStage().additionMap.keySet();
         for (String file : stageSet) {
-            if (!Repo.getWorkDir().checkExist(file)) {
+            if (!Repo.workFolder.checkExist(file)) {
                 set.add(file + " (deleted)\n");
             } else if (Repo.stageNotContainSameFile(file)) {
                 set.add(file + " (modified)\n");
             }
         }
+
         for (String file : set) {
             status.append(file);
         }
+
         status.append("\n");
         return status.toString();
     }
@@ -111,12 +115,12 @@ class Status extends Command {
     /** Return untracked files status. */
     private String untrackedFileStatus() {
         StringBuilder status = new StringBuilder("=== Untracked Files ===\n");
-        List<String> files = Repo.getWorkDir().getAllFiles();
+        List<String> files = Repo.workFolder.getAllFileName();
         assert files != null;
         for (String file : files) {
             if ((!Repo.currCommitContainsFile(file)
-                    && !Repo.getStage().addContains(file))
-                    || Repo.getStage().rmContains(file)) {
+                    && !Repo.getStage().additionMap.containsKey(file))
+                    || Repo.getStage().removalSet.contains(file)) {
                 status.append(file).append("\n");
             }
         }

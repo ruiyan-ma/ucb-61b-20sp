@@ -1,4 +1,6 @@
-package gitlet;
+package gitlet.commands;
+
+import gitlet.repo.Repo;
 
 import java.util.List;
 
@@ -6,10 +8,10 @@ import java.util.List;
  *  @author ryan ma
  *  */
 
-class GLog extends Command {
+public class GLog extends Command {
 
     /** Constructor function with ARGS. */
-    GLog(String[] args) {
+    public GLog(String[] args) {
         super(args, 0);
         checkInitial();
         checkOperandsNum();
@@ -21,12 +23,12 @@ class GLog extends Command {
     }
 
     @Override
-    void run() {
+    public void run() {
         checkOperands();
-        List<String> files = Utils.plainFilenamesIn(LogDir.LOG_FOLDER);
+        List<String> files = Repo.logFolder.getAllFileName();
         assert files != null;
         for (String file : files) {
-            String log = Repo.getLogDir().readLogOfBranch(file);
+            String log = Repo.logFolder.readLogOfBranch(file);
             System.out.print(log);
         }
     }

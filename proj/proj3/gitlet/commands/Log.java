@@ -1,13 +1,16 @@
-package gitlet;
+package gitlet.commands;
+
+import gitlet.objects.CommitData;
+import gitlet.repo.Repo;
 
 /** This class is the log command class.
  *  @author ryan ma
  *  */
 
-class Log extends Command {
+public class Log extends Command {
 
     /** Constructor function with ARGS. */
-    Log(String[] args) {
+    public Log(String[] args) {
         super(args, 0);
         checkInitial();
         checkOperandsNum();
@@ -19,7 +22,7 @@ class Log extends Command {
     }
 
     @Override
-    void run() {
+    public void run() {
         checkOperands();
         CommitData commitData = Repo.getCurrCommit();
         while (commitData != null) {
