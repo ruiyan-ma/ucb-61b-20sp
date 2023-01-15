@@ -43,11 +43,11 @@ public class Add extends Command {
         }
 
         // if the current commit has the same file with the working directory, remove it from addition map.
-        if (repo.workFolder.compareFile(fileName, repo.getCurrCommit().getBolbUID(fileName))) {
+        if (repo.workFolder.compareFile(fileName, repo.getCurrCommit())) {
             repo.getStage().additionMap.remove(fileName);
         } else {
             // if the stage doesn't contain the same file with the working directory, add it.
-            if (!repo.workFolder.compareFile(fileName, repo.getStage().getBolbUid(fileName))) {
+            if (!repo.workFolder.compareFile(fileName, repo.getStage())) {
                 // create a new bolb and save it.
                 Bolb bolb = new Bolb(repo.workFolder.readFromFile(fileName));
                 String uid = bolb.getUID();

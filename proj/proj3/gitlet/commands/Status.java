@@ -47,7 +47,7 @@ public class Status extends Command {
         List<String> branches = repo.branchFolder.getAllBranches();
         String currBranch = repo.getCurrBranch();
         for (String branch : branches) {
-            if (!branch.contentEquals(currBranch)) {
+            if (!branch.equals(currBranch)) {
                 status.append(branch).append("\n");
             } else {
                 status.append("*").append(branch).append("\n");
@@ -81,8 +81,7 @@ public class Status extends Command {
 
     /** Return modifications not staged for commit status. */
     private String notStagedStatus() {
-        StringBuilder status = new StringBuilder(
-            "=== Modifications Not Staged For Commit ===\n");
+        StringBuilder status = new StringBuilder("=== Modifications Not Staged For Commit ===\n");
         TreeSet<String> set = new TreeSet<>();
 
         for (String fileName: repo.getCurrCommit().getAllFileName()) {
@@ -90,7 +89,7 @@ public class Status extends Command {
                 if (!repo.getStage().removalSet.contains(fileName)) {
                     set.add(fileName + " (deleted)\n");
                 }
-            } else if (!repo.workFolder.compareFile(fileName, repo.getCurrCommit().getBolbUID(fileName))
+            } else if (!repo.workFolder.compareFile(fileName, repo.getCurrCommit())
                        && !repo.getStage().additionMap.containsKey(fileName)) {
                 set.add(fileName + " (modified)\n");
             }
@@ -100,7 +99,7 @@ public class Status extends Command {
         for (String file : stageSet) {
             if (!repo.workFolder.checkExist(file)) {
                 set.add(file + " (deleted)\n");
-            } else if (!repo.workFolder.compareFile(file, repo.getStage().getBolbUid(file))) {
+            } else if (!repo.workFolder.compareFile(file, repo.getStage())) {
                 set.add(file + " (modified)\n");
             }
         }

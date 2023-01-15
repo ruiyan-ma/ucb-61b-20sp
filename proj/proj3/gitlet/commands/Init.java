@@ -53,10 +53,10 @@ public class Init extends Command {
         String rootUID = root.getUID();
         repo.objectFolder.save(root);
 
-        repo.branchFolder.setHeadUid("master", rootUID);
         repo.setCurrBranch("master");
-        repo.logFolder.writeLogToBranch("master", root);
+        repo.branchFolder.setHeadUid("master", rootUID);
         repo.latestFolder.setLatestUid("master", rootUID);
+        repo.logFolder.writeLogToBranch("master", root);
     }
 
     /**

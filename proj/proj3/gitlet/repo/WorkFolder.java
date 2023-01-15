@@ -3,6 +3,7 @@ package gitlet.repo;
 import gitlet.Utils;
 import gitlet.objects.Bolb;
 import gitlet.objects.CommitData;
+import gitlet.objects.Stage;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,10 +36,17 @@ public class WorkFolder extends Folder {
     }
 
     /**
-     * Compare the content of the given file.
+     * Compare the content of a file with a given commit.
      */
-    public boolean compareFile(String fileName, String uid) {
-        return getUidOfFile(fileName).equals(uid);
+    public boolean compareFile(String fileName, CommitData commit) {
+        return getUidOfFile(fileName).equals(commit.getBolbUid(fileName));
+    }
+
+    /**
+     * Compare the content of a file with a given stage.
+     */
+    public boolean compareFile(String fileName, Stage stage) {
+        return getUidOfFile(fileName).equals(stage.getBolbUid(fileName));
     }
 
     /**
@@ -64,7 +72,7 @@ public class WorkFolder extends Folder {
                 if (!repo.getCurrCommit().containsFile(fileName)) {
                     untracked = true;
                     break;
-                } else if (!compareFile(fileName, repo.getCurrCommit().getBolbUID(fileName))) {
+                } else if (!compareFile(fileName, repo.getCurrCommit())) {
                     changed = true;
                     break;
                 }

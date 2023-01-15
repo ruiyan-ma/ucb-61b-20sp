@@ -72,7 +72,7 @@ public class CommitData extends GitletObject {
     /**
      * Return the UID of the file FILENAME.
      */
-    public String getBolbUID(String fileName) {
+    public String getBolbUid(String fileName) {
         return fileMap.get(fileName);
     }
 
@@ -194,7 +194,7 @@ public class CommitData extends GitletObject {
      */
     private boolean notContainSameFile(CommitData commit, String fileName) {
         if (commit.containsFile(fileName) && containsFile(fileName)) {
-            return !fileMap.get(fileName).equals(commit.getBolbUID(fileName));
+            return !fileMap.get(fileName).equals(commit.getBolbUid(fileName));
         } else {
             return (commit.containsFile(fileName) || containsFile(fileName));
         }

@@ -85,7 +85,7 @@ public class ObjectFolder extends Folder {
      * Return the bolb in the given commit.
      */
     public Bolb getBolb(CommitData commit, String fileName) {
-        String uid = commit.getBolbUID(fileName);
+        String uid = commit.getBolbUid(fileName);
         File path = getObjectFile(uid);
         return Utils.readObject(path, Bolb.class);
     }
