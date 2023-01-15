@@ -76,6 +76,7 @@ public class Checkout extends Command {
 
             repo.workFolder.checkoutAllFilesWithCommit(branchHead);
             repo.setCurrBranch(branchName);
+            repo.setCurrCommit(branchHead);
             repo.getStage().clean();
             repo.getStage().save();
         } else if (operands.length == 2) {
