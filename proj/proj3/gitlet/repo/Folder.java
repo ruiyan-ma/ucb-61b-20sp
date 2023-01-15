@@ -31,7 +31,7 @@ public class Folder {
     /**
      * Return the absolute path of the given file.
      */
-    public File getFile(String fileName) {
+    protected File getFile(String fileName) {
         return Utils.join(folder, fileName);
     }
 
@@ -67,7 +67,7 @@ public class Folder {
     /**
      * Delete the file.
      */
-    public void deleteFile(String fileName) {
+    protected void deleteFile(String fileName) {
         getFile(fileName).delete();
     }
 

@@ -204,7 +204,6 @@ public class Merge extends Command {
      * Return the uid of the split point.
      */
     private String findSplitUid() {
-//        Queue<CommitData> history = repo.objectFolder.getHistoryOfCommit(repo.getCurrCommit());
         Queue<CommitData> history = repo.getCurrCommit().getHistoryCommit();
         HashSet<String> historyOfCurrBranch = new HashSet<>();
 
