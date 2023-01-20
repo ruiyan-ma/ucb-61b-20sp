@@ -1,5 +1,25 @@
 # Gitlet
 
+This project implements a version-control system that mimics some features of Git.
+
+This project is from: https://inst.eecs.berkeley.edu/~cs61b/sp20/materials/proj/proj3/index.html
+
+Usage:
+
+```shell
+java gitlet/Main init
+
+java gitlet/Main status
+
+java gitlet/Main add new_file
+
+java gitlet/Main commit "commit message"
+
+java gitlet/Main checkout new_file
+```
+
+## Overview
+
 The code in this project is devided into two layers:
 
 - the command layer (upper layer): run command and execute logical code.
