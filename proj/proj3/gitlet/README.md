@@ -18,6 +18,8 @@ java gitlet/Main commit "commit message"
 java gitlet/Main checkout new_file
 ```
 
+See detailed usage in the above link. 
+
 ## Overview
 
 The code in this project is devided into two layers:
