@@ -7,6 +7,8 @@ This project is from: https://inst.eecs.berkeley.edu/~cs61b/sp20/materials/proj/
 Usage:
 
 ```shell
+javac gitlet/*.java
+
 java gitlet/Main init
 
 java gitlet/Main status
